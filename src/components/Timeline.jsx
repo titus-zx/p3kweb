@@ -58,6 +58,8 @@ export const Timeline = () => {
                     <div className="flex items-start gap-3 mb-3">
                       {item.current ? (
                         <Star className="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" />
+                      ) : index < 3 ? (
+                        <CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" />
                       ) : (
                         <Circle className="w-5 h-5 mt-1 flex-shrink-0" />
                       )}
@@ -107,7 +109,7 @@ export const Timeline = () => {
                 <div className="absolute left-0 top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
                   {item.current ? (
                     <Star className="w-4 h-4 text-white" fill="currentColor" />
-                  ) : index < 4 ? (
+                  ) : index < 6 ? (
                     <CheckCircle className="w-4 h-4 text-white" />
                   ) : (
                     <Circle className="w-4 h-4 text-white" />
