@@ -1,0 +1,41 @@
+.App {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3B82F6;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+/* Hover transitions */
+a {
+  transition: color 0.2s ease-in-out;
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Card hover effects */
+.shadow-lg {
+  transition: box-shadow 0.3s ease-in-out;
+}
