@@ -38,20 +38,20 @@ export const timelineData = [
     date: "Jun 2025 - Agst 2025",
     title: "Asesmen dan Masa Orientasi",
     description: "Periode asesmen dan pengenalan lingkungan gereja",
-    color: "red",
+    color: "green",
     current: true
   },
   {
     date: "Sep 2025",
     title: "Proses Pemilihan",
     description: "Pemilihan calon pendeta oleh jemaat",
-    color: "orange"
+    color: "green"
   },
   {
     date: "Des 2025 - Mei 2026",
     title: "Pendampingan dan Pembimbingan",
     description: "Masa pendampingan dan pembimbingan calon pendeta",
-    color: "orange"
+    color: "red"
   },
   {
     date: "Juli 2026",
