@@ -121,7 +121,7 @@ export const Timeline = () => {
                 <div className={`rounded-lg border-2 p-4 ${getColorClass(item.color)}`}>
                   <div className="font-bold text-sm mb-1">{item.date}</div>
                   <h3 className="font-bold text-base mb-2">{item.title}</h3>
-                  <p className="text-sm">{item.description}</p>
+                  <p className="text-sm whitespace-pre-line">{item.description}</p>
                 </div>
               </div>
             ))}
