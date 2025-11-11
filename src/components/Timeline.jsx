@@ -42,7 +42,7 @@ export const Timeline = () => {
                         <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                       </div>
                     </div>
-                    <p className="text-sm">{item.description}</p>
+                    <div className="text-sm whitespace-pre-line">{item.description}</div>
                   </div>
                   {index < 2 && (
                     <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300"></div>
@@ -68,7 +68,7 @@ export const Timeline = () => {
                         <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                       </div>
                     </div>
-                    <p className="text-sm">{item.description}</p>
+                    <div className="text-sm whitespace-pre-line">{item.description}</div>
                   </div>
                   {index < 2 && (
                     <div className="absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300 rotate-180"></div>
@@ -92,7 +92,7 @@ export const Timeline = () => {
                         <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                       </div>
                     </div>
-                    <p className="text-sm">{item.description}</p>
+                    <div className="text-sm whitespace-pre-line">{item.description}</div>
                   </div>
                   {index < 2 && (
                     <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300"></div>

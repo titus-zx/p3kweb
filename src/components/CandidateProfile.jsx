@@ -19,12 +19,12 @@ export const CandidateProfile = () => {
           <div className="lg:col-span-1">
             <Card className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
               <CardContent className="p-0">
-                <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <User className="w-24 h-24 text-blue-600 mx-auto mb-4" />
-                    <p className="text-sm text-gray-600">Foto calon pendeta</p>
-                    <p className="text-xs text-gray-500 mt-2">Upload melalui admin</p>
-                  </div>
+                <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-blue-200 overflow-hidden">
+                  <img 
+                    src="/faisha.jpg" 
+                    alt={candidateData.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6 bg-white">
                   <h3 className="text-2xl font-bold text-gray-900 text-center">
