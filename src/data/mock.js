@@ -19,7 +19,7 @@ export const timelineData = [
   {
     date: "Nov 2024",
     title: "Pembentukan Panitia",
-    description: "Pembentukan panitia pemanggilan pendeta ditetapkan berdasarkan : \n• Surat Keputusan Majelis GKJ Pamulang No. Kep-30/MG/GKJP/X/2024 tgl 1 Oktober 2024 tentang Pembentukan Panitia Pemanggilan Pendeta Kedua GKJ Pamulang\n• Adendum Surat Keputusan Majelis GKJ Pamulang No. Kep-ADD01/MG/GKJP/IV/2025 tgl 1 April 2025 tentang Penambahan Anggota Panitia Pemanggilan Pendeta Kedua GKJ Pamulang",
+    description: "Pembentukan panitia pemanggilan pendeta ditetapkan berdasarkan : \n\n• Surat Keputusan Majelis GKJ Pamulang No. Kep-30/MG/GKJP/X/2024 tgl 1 Oktober 2024 tentang Pembentukan Panitia Pemanggilan Pendeta Kedua GKJ Pamulang\n• Adendum Surat Keputusan Majelis GKJ Pamulang No. Kep-ADD01/MG/GKJP/IV/2025 tgl 1 April 2025 tentang Penambahan Anggota Panitia Pemanggilan Pendeta Kedua GKJ Pamulang",
     color: "green"
   },
   {
@@ -43,7 +43,7 @@ export const timelineData = [
   {
     date: "Sep 2025",
     title: "Proses Pemilihan",
-    description: "Pemilihan calon pendeta oleh jemaat",
+    description: "Pemilihan calon pendeta melalui voting oleh jemaat dengan dasar :\n\n• Keputusan Majelis GKJ Pamulang No.: KEP 11/GKJP/VIII/2025, tanggal 24 Agustus 2025 tentang Pelaksanaan serta Persyaratan dan Ketentuan Pemilihan Calon Pendeta Kedua Gereja Kristen Jawa Pamulang;\n• Keputusan Majelis GKJ Pamulang No.: KEP 12/GKJP/IX/2025, tanggal 9 September 2025 tentang Daftar Pemilih Tetap (DPT) Pemilihan Calon Pendeta Kedua Gereja Kristen Jawa Pamulang;\n\nAdapun hasil perhitungan suara Calon Pendeta GKJ Pamulang dapat kami sampaikan sebagai berikut:\n\n •Terdapat 569 (lima ratus enam puluh sembilan) orang jemaat yang dicatat dalam Daftar Pemilih Tetap (DPT).\n• Jemaat yang menggunakan hak pilihnya berjumlah 492 (empat ratus sembilan puluh dua) orang atau 86,4% dari total DPT, sehingga sesuai ketentuan pemungutan suara ini dinyatakan sah.\n• Suara “Setuju” sebanyak 455 (empat ratus lima puluh lima) suara atau 92,4% dari total suara.\n• Suara “Tidak Setuju” sebanyak 32 (tiga puluh dua) suara atau 6,5% dari total suara.\n• Suara tidak sah/gugur sebanyak 5 (lima) suara atau 1,0% dari total suara.\n\nHasil pemilihan tersebut sudah disahkan melalui Keputusan Majelis GKJ Pamulang No.KEP 13/GKJP/X/2025 tentang Hasil Perhitungan Suara Calon Pendeta Jemaat",
     color: "green"
   },
   {
