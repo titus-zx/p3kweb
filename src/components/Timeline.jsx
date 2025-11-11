@@ -1,6 +1,118 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { timelineData } from '../data/mock';
-import { CheckCircle, Circle, Star } from 'lucide-react';
+import { CheckCircle, Circle, Star, ChevronDown, ChevronUp } from 'lucide-react';
+
+const TimelineCard = ({ item, index, showIcon }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const maxHeight = 150; // pixels
+  const isLongContent = item.description.length > 200; // character threshold
+
+  const getColorClass = (color) => {
+    const colors = {
+      green: 'bg-green-100 text-green-700 border-green-300',
+      red: 'bg-red-100 text-red-700 border-red-300',
+      orange: 'bg-orange-100 text-orange-700 border-orange-300'
+    };
+    return colors[color] || colors.green;
+  };
+
+  return (
+    <div className={`rounded-lg border-2 p-6 ${getColorClass(item.color)} transition-all hover:shadow-lg h-full flex flex-col`}>
+      <div className="flex items-start gap-3 mb-3">
+        {item.current ? (
+          <Star className="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" />
+        ) : showIcon ? (
+          <CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" />
+        ) : (
+          <Circle className="w-5 h-5 mt-1 flex-shrink-0" />
+        )}
+        <div>
+          <div className="font-bold text-sm mb-1">{item.date}</div>
+          <h3 className="font-bold text-lg mb-2">{item.title}</h3>
+        </div>
+      </div>
+      <div className="relative flex-grow">
+        <div 
+          className={`text-sm whitespace-pre-line overflow-hidden transition-all duration-300 ${
+            !isExpanded && isLongContent ? 'max-h-[150px]' : 'max-h-none'
+          }`}
+          style={!isExpanded && isLongContent ? { 
+            maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
+          } : {}}
+        >
+          {item.description}
+        </div>
+        {isLongContent && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="mt-2 flex items-center gap-1 text-xs font-semibold hover:underline focus:outline-none"
+          >
+            {isExpanded ? (
+              <>
+                Lebih sedikit <ChevronUp className="w-3 h-3" />
+              </>
+            ) : (
+              <>
+                Selengkapnya <ChevronDown className="w-3 h-3" />
+              </>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const MobileTimelineCard = ({ item, index }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLongContent = item.description.length > 200;
+
+  const getColorClass = (color) => {
+    const colors = {
+      green: 'bg-green-100 text-green-700 border-green-300',
+      red: 'bg-red-100 text-red-700 border-red-300',
+      orange: 'bg-orange-100 text-orange-700 border-orange-300'
+    };
+    return colors[color] || colors.green;
+  };
+
+  return (
+    <div className={`rounded-lg border-2 p-4 ${getColorClass(item.color)}`}>
+      <div className="font-bold text-sm mb-1">{item.date}</div>
+      <h3 className="font-bold text-base mb-2">{item.title}</h3>
+      <div className="relative">
+        <div
+          className={`text-sm whitespace-pre-line overflow-hidden transition-all duration-300 ${
+            !isExpanded && isLongContent ? 'max-h-[150px]' : 'max-h-none'
+          }`}
+          style={!isExpanded && isLongContent ? {
+            maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
+          } : {}}
+        >
+          {item.description}
+        </div>
+        {isLongContent && (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="mt-2 flex items-center gap-1 text-xs font-semibold hover:underline focus:outline-none"
+          >
+            {isExpanded ? (
+              <>
+                Lebih sedikit <ChevronUp className="w-3 h-3" />
+              </>
+            ) : (
+              <>
+                Selengkapnya <ChevronDown className="w-3 h-3" />
+              </>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export const Timeline = () => {
   const getColorClass = (color) => {
@@ -28,22 +140,7 @@ export const Timeline = () => {
             <div className="grid grid-cols-3 gap-8 mb-12">
               {timelineData.slice(0, 3).map((item, index) => (
                 <div key={index} className="relative">
-                  <div className={`rounded-lg border-2 p-6 ${getColorClass(item.color)} transition-all hover:shadow-lg`}>
-                    <div className="flex items-start gap-3 mb-3">
-                      {item.current ? (
-                        <Star className="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" />
-                      ) : index < 3 ? (
-                        <CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" />
-                      ) : (
-                        <Circle className="w-5 h-5 mt-1 flex-shrink-0" />
-                      )}
-                      <div>
-                        <div className="font-bold text-sm mb-1">{item.date}</div>
-                        <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                      </div>
-                    </div>
-                    <div className="text-sm whitespace-pre-line">{item.description}</div>
-                  </div>
+                  <TimelineCard item={item} index={index} showIcon={true} />
                   {index < 2 && (
                     <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300"></div>
                   )}
@@ -54,22 +151,7 @@ export const Timeline = () => {
             <div className="grid grid-cols-3 gap-8 mb-12">
               {timelineData.slice(3, 6).map((item, index) => (
                 <div key={index} className="relative">
-                  <div className={`rounded-lg border-2 p-6 ${getColorClass(item.color)} transition-all hover:shadow-lg`}>
-                    <div className="flex items-start gap-3 mb-3">
-                      {item.current ? (
-                        <Star className="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" />
-                      ) : index < 3 ? (
-                        <CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" />
-                      ) : (
-                        <Circle className="w-5 h-5 mt-1 flex-shrink-0" />
-                      )}
-                      <div>
-                        <div className="font-bold text-sm mb-1">{item.date}</div>
-                        <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                      </div>
-                    </div>
-                    <div className="text-sm whitespace-pre-line">{item.description}</div>
-                  </div>
+                  <TimelineCard item={item} index={index} showIcon={true} />
                   {index < 2 && (
                     <div className="absolute top-1/2 left-0 transform -translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300 rotate-180"></div>
                   )}
@@ -80,20 +162,7 @@ export const Timeline = () => {
             <div className="grid grid-cols-3 gap-8">
               {timelineData.slice(6).map((item, index) => (
                 <div key={index} className="relative">
-                  <div className={`rounded-lg border-2 p-6 ${getColorClass(item.color)} transition-all hover:shadow-lg`}>
-                    <div className="flex items-start gap-3 mb-3">
-                      {item.current ? (
-                        <Star className="w-5 h-5 mt-1 flex-shrink-0" fill="currentColor" />
-                      ) : (
-                        <Circle className="w-5 h-5 mt-1 flex-shrink-0" />
-                      )}
-                      <div>
-                        <div className="font-bold text-sm mb-1">{item.date}</div>
-                        <h3 className="font-bold text-lg mb-2">{item.title}</h3>
-                      </div>
-                    </div>
-                    <div className="text-sm whitespace-pre-line">{item.description}</div>
-                  </div>
+                  <TimelineCard item={item} index={index} showIcon={false} />
                   {index < 2 && (
                     <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 w-8 h-0.5 bg-gray-300"></div>
                   )}
@@ -118,11 +187,7 @@ export const Timeline = () => {
                 {index < timelineData.length - 1 && (
                   <div className="absolute left-3 top-6 bottom-0 w-0.5 bg-gray-300"></div>
                 )}
-                <div className={`rounded-lg border-2 p-4 ${getColorClass(item.color)}`}>
-                  <div className="font-bold text-sm mb-1">{item.date}</div>
-                  <h3 className="font-bold text-base mb-2">{item.title}</h3>
-                  <p className="text-sm whitespace-pre-line">{item.description}</p>
-                </div>
+                <MobileTimelineCard item={item} index={index} />
               </div>
             ))}
           </div>
