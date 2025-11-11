@@ -2,7 +2,7 @@ import React from 'react';
 import { fundingCosts, fundingIncome, formatCurrency, getTotalCosts, getTotalIncome } from '../data/mock';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Wallet } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
 const INCOME_COLORS = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
@@ -75,7 +75,7 @@ export const Funding = () => {
           <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-blue-50 to-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-700">
-                <DollarSign className="w-5 h-5" />
+                <Wallet className="w-5 h-5" />
                 Saldo
               </CardTitle>
             </CardHeader>
