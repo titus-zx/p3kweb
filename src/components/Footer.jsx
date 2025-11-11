@@ -14,11 +14,10 @@ export const Footer = () => {
               </div>
               <div>
                 <h3 className="text-xl font-bold">GKJ Pamulang</h3>
-                <p className="text-sm text-gray-400">Gereja Kristen Jawa</p>
+                <p className="text-sm text-gray-400">Panitia Pemanggilan Pendeta Kedua GKJ Pamulang</p>
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Panitia Pemanggilan Pendeta Kedua GKJ Pamulang. 
               Melayani dengan kasih dan membawa damai sejahtera.
             </p>
           </div>
@@ -30,23 +29,23 @@ export const Footer = () => {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                 <span className="text-gray-400 text-sm">
-                  Jl. Pamulang, Tangerang Selatan, Banten
+                  Jl. Siliwangi No. 7, Pamulang, Tangerang Selatan, Banten
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <span className="text-gray-400 text-sm">(021) 1234-5678</span>
+                <span className="text-gray-400 text-sm">(021) 7413873</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                <span className="text-gray-400 text-sm">info@gkjpamulang.org</span>
+                <span className="text-gray-400 text-sm">pppkgjp@gmail.com</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-bold text-lg mb-4">Navigasi</h4>
+            <h4 className="font-bold text-lg mb-4">Menu</h4>
             <div className="space-y-2">
               <a href="#timeline" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Alur Pemanggilan
@@ -63,7 +62,7 @@ export const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            &copy; {new Date().getFullYear()} GKJ Pamulang. Panitia Pemanggilan Pendeta Kedua.
+            &copy; {new Date().getFullYear()} Panitia Pemanggilan Pendeta Kedua GKJ Pamulang.
           </p>
         </div>
       </div>

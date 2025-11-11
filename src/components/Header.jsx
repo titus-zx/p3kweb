@@ -14,7 +14,7 @@ export const Header = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">GKJ Pamulang</h1>
-              <p className="text-sm text-gray-600">Panitia Pemanggilan Pendeta</p>
+              <p className="text-sm text-gray-600">Panitia Pemanggilan Pendeta Kedua</p>
             </div>
           </div>
           <nav className="hidden md:flex gap-6">
