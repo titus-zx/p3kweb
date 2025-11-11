@@ -29,6 +29,9 @@ export const Header = () => {
             <a href="#funding" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Pendanaan
             </a>
+            <a href="https://janjiiman.gkj-pamulang.org" target="_blank" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              Janji Iman
+            </a>
           </nav>
           
           {/* Mobile menu button */}
@@ -69,6 +72,14 @@ export const Header = () => {
                 className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
               >
                 Pendanaan
+              </a>
+              <a
+                href="https://janjiiman.gkj-pamulang.org"
+                onClick={() => setMobileMenuOpen(false)}
+                target="_blank"
+                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+              >
+                Janji Iman
               </a>
             </div>
           </nav>
