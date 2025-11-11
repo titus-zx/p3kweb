@@ -25,19 +25,19 @@ export const timelineData = [
   {
     date: "Feb 2025",
     title: "Jajak Pendapat",
-    description: "Melakukan jajak pendapat kepada jemaat",
+    description: "Melakukan jajak pendapat kepada jemaat, melalui metode FGD (Focus Group Discussion) dimana jemaat dapat memberikan masukan dan saran terkait calon pendeta yang akan diusulkan",
     color: "green"
   },
   {
     date: "Apr 2025",
     title: "Pemanggilan",
-    description: "Proses pemanggilan calon pendeta",
+    description: "Proses pemanggilan calon pendeta dilaksanakan melalui tahapan berikut :\n\n• Pemanggilan calon pendeta & surat kesanggupan calon Pendeta\n• Proses pengecekan kelengkapan administrasi & interwiew awal\n• Pembahasan rencana uji/trial calon pendeta antara Tim dengan Majelis\n• Undangan sarasehan visi & misi calon Pendeta kepada jemaat\n• Pelaksanaan Sarasehan visi & misi calon Pendeta\n• Kotbah Calon Pendeta dalam ibadah minggu",
     color: "green"
   },
   {
     date: "Jun 2025 - Agst 2025",
     title: "Asesmen dan Masa Orientasi",
-    description: "Periode asesmen dan pengenalan lingkungan gereja",
+    description: "Periode asesmen dan pengenalan lingkungan gereja dilaksanakan melalui tahapan berikut :\n\n• Pelaksanaan tes Kesehatan lengkap\n• Pelaksanaan tes Psikologi\n• Interview dan observasi\n• Evaluasi hasil tes calon pendeta oleh Majelis dan Tim\n\n Dari hasil Test Psikologi dan Tes Kesehatan, calon pendeta dinyatakan Sehat dan Layak di Calonkan sebagai Calon Pendeta GKJ Pamulang.",
     color: "green"
   },
   {
