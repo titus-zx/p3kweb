@@ -19,7 +19,7 @@ export const timelineData = [
   {
     date: "Nov 2024",
     title: "Pembentukan Panitia",
-    description: "Pembentukan tim panitia pemanggilan pendeta",
+    description: "Pembentukan panitia pemanggilan pendeta ditetapkan dengan Surat Keputusan Majelis GKJ Pamulang No. Kep-30/MG/GKJP/X/2024 tgl 1 Oktober 2024 tentang Pembentukan Panitia Pemanggilan Pendeta Kedua GKJ Pamulang dan Adendum Surat Keputusan Majelis GKJ Pamulang No. Kep-ADD01/MG/GKJP/IV/2025 tgl 1 April 2025 tentang Penambahan Anggota Panitia Pemanggilan Pendeta Kedua GKJ Pamulang",
     color: "green"
   },
   {
