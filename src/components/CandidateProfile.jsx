@@ -47,7 +47,11 @@ export const CandidateProfile = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 leading-relaxed">{candidateData.bio}</p>
+                <div className="text-gray-700 leading-relaxed text-justify space-y-4">
+                  {candidateData.bio.split('\n').map((paragraph, index) => (
+                    <p key={index} className="whitespace-pre-line">{paragraph}</p>
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
@@ -92,7 +96,7 @@ export const CandidateProfile = () => {
             </Card>
 
             {/* CV */}
-            <Card className="shadow-lg hover:shadow-xl transition-shadow">
+            {/* <Card className="shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="w-5 h-5 text-blue-600" />
@@ -106,7 +110,7 @@ export const CandidateProfile = () => {
                   <p className="text-sm text-gray-500">File CV akan ditambahkan oleh admin</p>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

@@ -4,14 +4,14 @@ export const candidateData = {
   name: "Faisha Sudarlin, M.Th.",
   photo: "/api/placeholder/300/400",
   education: [
-    "S1 Teologi - Sekolah Tinggi Teologi Jakarta",
-    "S2 Teologi (M.Th.) - Universitas Kristen Duta Wacana"
+    "S1 Seni Musik Gerejawi (S.Sn) - STT Abdiel Semarang",
+    "S2 Teologi (M.Th.) - STT Jakarta"
   ],
   experience: [
-    "Pendeta di GKJ Wonosari (2018-2023)",
-    "Asisten Pendeta di GKJ Salatiga (2015-2018)"
+    "Tenaga Pelayan Gerejawi di GKJ Pamulang",
+    "Anggota Tim Inti Nyanyian Gereja di Yayasan Musik Gereja Indonesia"
   ],
-  bio: "Faisha Sudarlin, M.Th. adalah calon pendeta yang berpengalaman dalam pelayanan jemaat selama lebih dari 8 tahun. Beliau memiliki passion dalam pengembangan jemaat dan pembinaan warga gereja.",
+  bio: "Sdr. Faisha Sudarlin yang akrab dengan panggilan mas Fa memulai tugas sebagai tenaga pelayan gerejawi di GKJ Pamulang sejak tanggal 10 Juni 2018, setelah itu diangkat sebagai karyawan tetap di GKJ Pamulang per 1 September 2020. Saat ini yang bersangkutan juga menjadi majelis gereja dengan jabatan Penatua membawahi bidang Kesaksian dan Pelayanan.\n\nDi awal pelayanannya, mas Fa menjalankan tugas-tugas gerejawi antara lain: melatih musik bagi pemandu/pengiring lagu pujian; melatih paduan suara untuk beberapa kategorial seperti: Adiyuswa, KPR, dan jemaat dewasa/wilayah; termasuk bertugas sebagai pemandu/pengiring lagu pujian.\n\nDalam perkembangannya, Mas Fa juga menjalankan tugas gerejawi lainnya, yakni sebagai pembawa firman baik dalam ibadah minggu atapun ibadah lainnya.\n\nDengan memperhatikan hasil jajak pendapat dengan jemaat terhadap pencalonan mas Fa sebagai pendeta GKJ Pamulang, maka berdasarkan Keputusan No.: KEP-05/MG/GKJP/III/2025, tanggal 25 Maret 2025, Majelis telah memutuskan Sdr. Pnt. Faisha Sudarlin, MTh. Sebagai calon tunggal untuk calon Pendeta kedua GKJ Pamulang.",
   cv: ""
 };
 
