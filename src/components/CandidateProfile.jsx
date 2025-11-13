@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { candidateData } from '../data/mock';
 import { GraduationCap, Briefcase, User, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -47,10 +48,25 @@ export const CandidateProfile = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-gray-700 leading-relaxed text-justify space-y-4">
-                  {candidateData.bio.split('\n').map((paragraph, index) => (
-                    <p key={index} className="whitespace-pre-line">{paragraph}</p>
-                  ))}
+                <div className="text-gray-700 leading-relaxed text-justify">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
+                      ul: ({ children }) => <ul className="my-3 space-y-2 list-disc list-inside">{children}</ul>,
+                      li: ({ children }) => <li className="ml-4">{children}</li>,
+                      h1: ({ children }) => <h1 className="text-xl font-bold mt-4 mb-3 first:mt-0">{children}</h1>,
+                      h2: ({ children }) => <h2 className="text-lg font-bold mt-4 mb-3 first:mt-0">{children}</h2>,
+                      h3: ({ children }) => <h3 className="text-base font-bold mt-3 mb-2 first:mt-0">{children}</h3>,
+                      h4: ({ children }) => <h4 className="text-base font-semibold mt-3 mb-2 first:mt-0">{children}</h4>,
+                      h5: ({ children }) => <h5 className="text-sm font-semibold mt-3 mb-2 first:mt-0">{children}</h5>,
+                      h6: ({ children }) => <h6 className="text-sm font-medium mt-3 mb-2 first:mt-0">{children}</h6>,
+                      blockquote: ({ children }) => <blockquote className="border-l-4 border-blue-500 bg-blue-50 pl-4 py-2 my-3 italic">{children}</blockquote>,
+                      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>
+                    }}
+                  >
+                    {candidateData.bio}
+                  </ReactMarkdown>
                 </div>
               </CardContent>
             </Card>
