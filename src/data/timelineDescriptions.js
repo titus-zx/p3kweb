@@ -48,9 +48,39 @@ Adapun hasil perhitungan suara Calon Pendeta GKJ Pamulang dapat kami sampaikan s
 
 Dengan demikian mayoritas **Jemaat Menyatakan Setuju Sdr Faisha Sudarlin, M.Th sebagai Calon Pendeta GKJ Pamulang** dan telah disahkan melalui **Keputusan Majelis GKJ Pamulang No.KEP 13/GKJP/X/2025** tentang Hasil Perhitungan Suara Calon Pendeta Jemaat`,
 
-  pendampingan: `Masa pendampingan dan pembimbingan calon pendeta untuk mempersiapkan tahapan selanjutnya dalam proses pemanggilan.
+  pendampingan: `**Tim Pendamping** ditetapkan oleh majelis dan beranggotakan unsur pendeta/pendeta konsulen GKJ Pamulang, penatua, diaken dan warga gereja yang dipandang layak.
+Berdasarkan Keputusan No.: **KEP 15/GKJP/X/2025 tanggal 28 Oktober 2025** majelis telah membentuk Tim Pendamping calon pendeta dengan tugas pendampingan dan susunan keanggotaan sebagai berikut:
 
-**Status:** Sedang berlangsung`,
+**Spiritualitas**
+* Pdt. Yosua Budiman Harahap, M.Th.
+* Pdt. Rudy Ariyanto, S.Th., M.Min
+
+**Kepribadian**
+* Dkn. Sumarsih (Majelis)
+* Dkn. Wieke Fepie Rusdiana (Majelis)
+* Bpk. Winayu Siswanto (Warga Gereja)
+* Bpk. Eko Kurnianto (Warga Gereja)
+* Ibu Florencia Irena (Warga Gereja)
+
+**Komitmen**
+* Pnt. James Munthe (Majelis)
+* Dkn. Sussi Widi Kurniasih (Majelis)
+* Bpk. Soenoe Harmanto (Warga Gereja)
+* Ibu Hanna Chriestina G. (Warga Gereja)
+
+**Kepemimpinan**
+* Pnt. Singgih Hujianto (Majelis)
+* Dkn. Sulistiandriatmoko (Majelis)
+* Bpk. J.E. Mujiono (Warga Gereja)
+
+**Pengelolaan Keuangan**
+* Pnt. Leyla Mariana Harmanto (Majelis)
+* Pnt. Indrawati Sulistyo Rini (Majelis)
+
+**Tim Pembimbing** akan ditetapkan oleh Sidang XXII GKJ Klasis Jakarta Bagian Barat
+dan beranggotakan 4 (empat) orang Pendeta dengan masa pelayanan sekurang-
+kurangnya 5 (lima) tahun.
+`,
 
   ujian: `Ujian komprehensif yang harus dilalui calon pendeta sebagai syarat untuk melanjutkan ke tahap vikariat.`,
 

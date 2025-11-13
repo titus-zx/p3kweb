@@ -16,15 +16,15 @@ export const CommitteeStructure = () => {
     ],
     tugasPokok: "Melaksanakan pemanggilan Pendeta sesuai Pokok-pokok Ajaran Gereja Kristen Jawa, Tata Gereja dan Tata Laksana Gereja Kristen Jawa",
     masaBakti: {
-      start: "November 2024",
-      end: "July 2027"
+      start: "Nov 2024",
+      end: "Jul 2027"
     },
     panitiaInti: [
       { position: "Ketua", name: "Bangun Wibowo" },
       { position: "Wakil Ketua", name: "Ery Setiawan" },
       { position: "Sekretaris I", name: "Eko Kurniyanto" },
       { position: "Sekretaris II", name: "Merry Christiana" },
-      { position: "Bendahara I", name: "Kristiena E Parikesit" },
+      { position: "Bendahara I", name: "Kristiena Ekowati Parikesit" },
       { position: "Bendahara II", name: "Finny Yunita Heru" }
     ],
     bidangKesekretariatan: {
@@ -38,7 +38,7 @@ export const CommitteeStructure = () => {
       members: [
         "Harry Anggoro",
         "Trami S. Trijogo", 
-        "Sayogo Suprianto",
+        "Sayogo Supriantoro",
         "Andrianto Nataladi",
         "Maria F. Stefanus"
       ]
@@ -105,10 +105,10 @@ export const CommitteeStructure = () => {
             <Users className="w-12 h-12 text-blue-600" />
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Susunan Panitia Pemanggilan Pendeta
+            Susunan Panitia
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Gereja Kristen Jawa Pamulang
+            Majelis Gereja Kristen Jawa Pamulang menetapkan susunan panitia pemanggilan pendeta kedua GKJ Pamulang sebagai berikut
           </p>
         </div>
 
