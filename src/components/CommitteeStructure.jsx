@@ -90,21 +90,21 @@ export const CommitteeStructure = () => {
   );
 
   const PersonCard = ({ position, name, className = "" }) => (
-    <div className={`bg-gray-50 rounded-lg p-4 text-center ${className}`}>
-      <div className="font-semibold text-gray-800 text-sm mb-1">{position}</div>
-      <div className="text-gray-700 font-medium">{name}</div>
+    <div className={`bg-gray-50 rounded-lg p-2 text-center ${className}`}>
+      <div className="font-semibold text-gray-800 text-xs mb-1">{position}</div>
+      <div className="text-gray-700 font-medium text-sm">{name}</div>
     </div>
   );
 
   return (
-    <section id="committee" className="py-20 bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <section id="committee" className="py-12 bg-gradient-to-br from-blue-50 via-white to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-3">
             <Users className="w-12 h-12 text-blue-600" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Susunan Panitia
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -112,10 +112,10 @@ export const CommitteeStructure = () => {
           </p>
         </div>
 
-        <div className="grid gap-8">
+        <div className="grid gap-6">
           {/* Dasar Penetapan */}
           <SectionCard title="Dasar Penetapan">
-            <div className="space-y-4">
+            <div className="space-y-3">
               {committeeData.dasarPenetapan.map((item, index) => (
                 <div key={index} className="border-l-4 border-blue-500 pl-4">
                   <h4 className="font-semibold text-gray-800">{item.title}</h4>
@@ -126,7 +126,7 @@ export const CommitteeStructure = () => {
           </SectionCard>
 
           {/* Tugas Pokok & Masa Bakti */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             <SectionCard title="Tugas Pokok">
               <p className="text-gray-700 leading-relaxed">
                 {committeeData.tugasPokok}
@@ -144,7 +144,7 @@ export const CommitteeStructure = () => {
 
           {/* Panitia Inti */}
           <SectionCard title="Panitia Inti">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
               {committeeData.panitiaInti.map((member, index) => (
                 <PersonCard 
                   key={index} 
@@ -153,76 +153,81 @@ export const CommitteeStructure = () => {
                 />
               ))}
             </div>
-          </SectionCard>
 
-          {/* Anggota - Bidang-bidang */}
-          <SectionCard title="Anggota">
-            <div className="space-y-8">
-              {/* Bidang Kesekretariatan */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangKesekretariatan.coordinator}</h4>
-                <div className="bg-gray-50 rounded-lg p-4 text-center">
-                  <div className="text-gray-700 font-medium">Titus Adi Prasetyo</div>
-                </div>
-              </div>
-
-              {/* Bidang Komunikasi & Informasi */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangKomunikasi.coordinator}</h4>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {committeeData.bidangKomunikasi.members.map((member, index) => (
+            {/* Anggota - Bidang-bidang */}
+            <div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2 border-b border-gray-200 pb-2">Anggota</h3>
+              <div className="space-y-4">
+                {/* Bidang Kesekretariatan */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKesekretariatan.coordinator}</h4>
+                  <div className="grid gap-3">
+                  {committeeData.bidangKesekretariatan.members.map((member, index) => (
                     <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-gray-700">{member}</div>
+                      <div className="text-gray-700 text-sm">{member}</div>
                     </div>
                   ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Bidang Asesmen */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangAsesmen.coordinator}</h4>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {committeeData.bidangAsesmen.members.map((member, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-gray-700">{member}</div>
-                    </div>
-                  ))}
+                {/* Bidang Komunikasi & Informasi */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKomunikasi.coordinator}</h4>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {committeeData.bidangKomunikasi.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Bidang IT & Litbang */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangIT.coordinator}</h4>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {committeeData.bidangIT.members.map((member, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-gray-700">{member}</div>
-                    </div>
-                  ))}
+                {/* Bidang Asesmen */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangAsesmen.coordinator}</h4>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {committeeData.bidangAsesmen.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Bidang Keuangan dan Usaha Dana */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangKeuangan.coordinator}</h4>
-                <div className="grid md:grid-cols-3 gap-3">
-                  {committeeData.bidangKeuangan.members.map((member, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-gray-700">{member}</div>
-                    </div>
-                  ))}
+                {/* Bidang IT & Litbang */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangIT.coordinator}</h4>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {committeeData.bidangIT.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Bidang Prasarana dan Sarana */}
-              <div>
-                <h4 className="font-bold text-gray-800 mb-3">{committeeData.bidangPrasarana.coordinator}</h4>
-                <div className="grid md:grid-cols-2 gap-3">
-                  {committeeData.bidangPrasarana.members.map((member, index) => (
-                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                      <div className="text-gray-700">{member}</div>
-                    </div>
-                  ))}
+                {/* Bidang Keuangan dan Usaha Dana */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKeuangan.coordinator}</h4>
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {committeeData.bidangKeuangan.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bidang Prasarana dan Sarana */}
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangPrasarana.coordinator}</h4>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {committeeData.bidangPrasarana.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
