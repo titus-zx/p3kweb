@@ -161,11 +161,13 @@ export const CommitteeStructure = () => {
                 {/* Bidang Kesekretariatan */}
                 <div>
                   <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKesekretariatan.coordinator}</h4>
-                    {committeeData.bidangKesekretariatan.members.map((member, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700 text-sm">{member}</div>
-                      </div>
-                    ))}
+                  <div className="grid gap-3">
+                  {committeeData.bidangKesekretariatan.members.map((member, index) => (
+                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                      <div className="text-gray-700 text-sm">{member}</div>
+                    </div>
+                  ))}
+                  </div>
                 </div>
 
                 {/* Bidang Komunikasi & Informasi */}
