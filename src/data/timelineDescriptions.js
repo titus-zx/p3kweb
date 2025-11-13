@@ -11,9 +11,7 @@ export const timelineDescriptions = {
 
 Proses ini memastikan keterlibatan aktif jemaat dalam pemilihan calon pendeta`,
 
-  pemanggilan: `### Proses Pemanggilan Calon Pendeta
-
-Proses pemanggilan calon pendeta dilaksanakan melalui tahapan berikut:
+  pemanggilan: `Proses pemanggilan calon pendeta dilaksanakan melalui tahapan berikut:
 
 * Pemanggilan calon pendeta & surat kesanggupan calon Pendeta
 * Proses pengecekan kelengkapan administrasi & interview awal
@@ -22,9 +20,7 @@ Proses pemanggilan calon pendeta dilaksanakan melalui tahapan berikut:
 * Pelaksanaan Sarasehan visi & misi calon Pendeta
 * Kotbah Calon Pendeta dalam ibadah minggu`,
 
-  asesmen: `### Periode Asesmen dan Pengenalan Lingkungan
-
-Periode asesmen dan pengenalan lingkungan gereja dilaksanakan melalui tahapan berikut:
+  asesmen: `Periode asesmen dan pengenalan lingkungan gereja dilaksanakan melalui tahapan berikut:
 
 * Pelaksanaan tes Kesehatan lengkap
 * Pelaksanaan tes Psikologi  
@@ -50,25 +46,15 @@ Adapun hasil perhitungan suara Calon Pendeta GKJ Pamulang dapat kami sampaikan s
 * Suara **"Tidak Setuju"** sebanyak **32** (tiga puluh dua) suara atau **6,5%** dari total suara  
 * Suara tidak sah/gugur sebanyak **5** (lima) suara atau **1,0%** dari total suara
 
-Dengan demikian mayoritas jemaat Setuju Sdr Faisha Sudarlin sebagai Calon Pendeta GKJ Pamulang dan telah disahkan melalui Keputusan Majelis GKJ Pamulang No.KEP 13/GKJP/X/2025 tentang Hasil Perhitungan Suara Calon Pendeta Jemaat`,
+Dengan demikian mayoritas **Jemaat Menyatakan Setuju Sdr Faisha Sudarlin, M.Th sebagai Calon Pendeta GKJ Pamulang** dan telah disahkan melalui **Keputusan Majelis GKJ Pamulang No.KEP 13/GKJP/X/2025** tentang Hasil Perhitungan Suara Calon Pendeta Jemaat`,
 
-  pendampingan: `### Masa Pendampingan dan Pembimbingan
-
-Masa pendampingan dan pembimbingan calon pendeta untuk mempersiapkan tahapan selanjutnya dalam proses pemanggilan.
+  pendampingan: `Masa pendampingan dan pembimbingan calon pendeta untuk mempersiapkan tahapan selanjutnya dalam proses pemanggilan.
 
 **Status:** Sedang berlangsung`,
 
-  ujian: `### Ujian Pra-Pentahbisan (Premtoar)
+  ujian: `Ujian komprehensif yang harus dilalui calon pendeta sebagai syarat untuk melanjutkan ke tahap vikariat.`,
 
-Ujian komprehensif yang harus dilalui calon pendeta sebagai syarat untuk melanjutkan ke tahap vikariat.`,
+  vikariat: `Periode magang dan pembelajaran praktis bagi calon pendeta sebelum pentahbisan resmi.`,
 
-  vikariat: `### Masa Vikariat
-
-Periode magang dan pembelajaran praktis bagi calon pendeta sebelum pentahbisan resmi.`,
-
-  pentahbisan: `### Pentahbisan Pendeta Kedua
-
-Upacara resmi pentahbisan pendeta kedua GKJ Pamulang.
-
-Ini merupakan tahap final dari seluruh proses pemanggilan pendeta.`
+  pentahbisan: `Pentahbisan resmi pendeta kedua GKJ Pamulang. Ini merupakan tahap final dari seluruh proses pemanggilan pendeta.`
 };
