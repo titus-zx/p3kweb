@@ -90,9 +90,9 @@ export const CommitteeStructure = () => {
   );
 
   const PersonCard = ({ position, name, className = "" }) => (
-    <div className={`bg-gray-50 rounded-lg p-3 text-center ${className}`}>
-      <div className="font-semibold text-gray-800 text-sm mb-1">{position}</div>
-      <div className="text-gray-700 font-medium">{name}</div>
+    <div className={`bg-gray-50 rounded-lg p-2 text-center ${className}`}>
+      <div className="font-semibold text-gray-800 text-xs mb-1">{position}</div>
+      <div className="text-gray-700 font-medium text-sm">{name}</div>
     </div>
   );
 
@@ -142,26 +142,22 @@ export const CommitteeStructure = () => {
             </SectionCard>
           </div>
 
-          {/* Struktur Organisasi */}
-          <SectionCard title="Struktur Panitia">
-            {/* Panitia Inti */}
-            <div className="mb-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-2">Panitia Inti</h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {committeeData.panitiaInti.map((member, index) => (
-                  <PersonCard 
-                    key={index} 
-                    position={member.position} 
-                    name={member.name}
-                  />
-                ))}
-              </div>
+          {/* Panitia Inti */}
+          <SectionCard title="Panitia Inti">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+              {committeeData.panitiaInti.map((member, index) => (
+                <PersonCard 
+                  key={index} 
+                  position={member.position} 
+                  name={member.name}
+                />
+              ))}
             </div>
 
             {/* Anggota - Bidang-bidang */}
             <div>
-              <h3 className="text-lg font-bold text-gray-800 mb-3 border-b border-gray-200 pb-2">Anggota</h3>
-              <div className="space-y-5">
+              <h3 className="text-lg font-bold text-gray-800 mb-2 border-b border-gray-200 pb-2">Anggota</h3>
+              <div className="space-y-4">
                 {/* Bidang Kesekretariatan */}
                 <div>
                   <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKesekretariatan.coordinator}</h4>
