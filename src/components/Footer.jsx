@@ -50,6 +50,9 @@ export const Footer = () => {
               <a href="#timeline" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Alur Pemanggilan
               </a>
+              <a href="#committee" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                Susunan Panitia
+              </a>
               <a href="#candidate" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Profil Calon Pendeta
               </a>
