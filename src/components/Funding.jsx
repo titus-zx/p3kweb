@@ -10,7 +10,9 @@ const INCOME_COLORS = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
 export const Funding = () => {
   const totalCosts = getTotalCosts();
   const totalIncome = getTotalIncome();
+  const totalRealisasi = fundingIncome.reduce((sum, item) => sum + item.realisasi, 0);
   const balance = totalIncome - totalCosts;
+  const actualBalance = totalRealisasi - totalCosts;
 
   const costsChartData = fundingCosts.map(item => ({
     name: item.name,
@@ -18,8 +20,13 @@ export const Funding = () => {
   }));
 
   const incomeChartData = fundingIncome.map(item => ({
-    name: item.name,
-    amount: item.amount
+    name: item.name.length > 15 ? 
+      item.name.replace('Penjualan Makanan', 'Penjualan\nMakanan')
+              .replace('Ucapan Pentahbisan', 'Ucapan\nPentahbisan') 
+      : item.name,
+    fullName: item.name,
+    target: item.amount,
+    realisasi: item.realisasi
   }));
 
   const CustomTooltip = ({ active, payload }) => {
@@ -45,7 +52,7 @@ export const Funding = () => {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-red-50 to-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-red-700">
@@ -63,7 +70,7 @@ export const Funding = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-green-700">
                 <TrendingUp className="w-5 h-5" />
-                Total Penerimaan
+                Target Penerimaan
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -72,19 +79,34 @@ export const Funding = () => {
             </CardContent>
           </Card>
 
+          <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-orange-50 to-white">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-orange-700">
+                <DollarSign className="w-5 h-5" />
+                Realisasi Penerimaan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold text-orange-600">{formatCurrency(totalRealisasi)}</p>
+              <p className="text-sm text-gray-600 mt-2">
+                {((totalRealisasi / totalIncome) * 100).toFixed(1)}% dari target
+              </p>
+            </CardContent>
+          </Card>
+
           <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-blue-50 to-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-700">
                 <Wallet className="w-5 h-5" />
-                Saldo
+                Saldo Aktual
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={`text-3xl font-bold ${balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                {formatCurrency(balance)}
+              <p className={`text-3xl font-bold ${actualBalance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+                {formatCurrency(actualBalance)}
               </p>
               <p className="text-sm text-gray-600 mt-2">
-                {balance >= 0 ? 'Anggaran seimbang' : 'Kekurangan dana'}
+                {actualBalance >= 0 ? 'Realisasi positif' : 'Masih kekurangan'}
               </p>
             </CardContent>
           </Card>
@@ -129,17 +151,27 @@ export const Funding = () => {
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={incomeChartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} tick={{ fontSize: 12 }} />
+                  <XAxis 
+                    dataKey="name" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={120} 
+                    tick={{ fontSize: 10, lineHeight: 1.2 }}
+                    interval={0}
+                    tickLine={false}
+                  />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip 
                     formatter={(value) => formatCurrency(value)}
+                    labelFormatter={(label) => {
+                      const item = incomeChartData.find(d => d.name === label);
+                      return item?.fullName || label;
+                    }}
                     contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
                   />
-                  <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
-                    {incomeChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={INCOME_COLORS[index % INCOME_COLORS.length]} />
-                    ))}
-                  </Bar>
+                  <Legend />
+                  <Bar dataKey="target" fill="#10B981" name="Target" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="realisasi" fill="#F59E0B" name="Realisasi" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -193,20 +225,45 @@ export const Funding = () => {
                     <tr className="border-b-2 border-gray-200">
                       <th className="text-left py-3 px-2 font-semibold text-gray-700">Sumber</th>
                       <th className="text-right py-3 px-2 font-semibold text-gray-700">Target</th>
+                      <th className="text-right py-3 px-2 font-semibold text-gray-700">Realisasi</th>
+                      <th className="text-right py-3 px-2 font-semibold text-gray-700">Progress</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {fundingIncome.map((income, index) => (
-                      <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="py-3 px-2 text-gray-700">{income.name}</td>
-                        <td className="py-3 px-2 text-right font-semibold text-gray-900">
-                          {formatCurrency(income.amount)}
-                        </td>
-                      </tr>
-                    ))}
+                    {fundingIncome.map((income, index) => {
+                      const progress = (income.realisasi / income.amount * 100).toFixed(1);
+                      return (
+                        <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                          <td className="py-3 px-2 text-gray-700">{income.name}</td>
+                          <td className="py-3 px-2 text-right font-semibold text-gray-900">
+                            {formatCurrency(income.amount)}
+                          </td>
+                          <td className="py-3 px-2 text-right font-semibold text-orange-600">
+                            {formatCurrency(income.realisasi)}
+                          </td>
+                          <td className="py-3 px-2 text-right">
+                            <span className={`text-sm font-medium px-2 py-1 rounded ${
+                              progress >= 80 ? 'bg-green-100 text-green-700' :
+                              progress >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {progress}%
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
                     <tr className="border-t-2 border-gray-300 font-bold">
                       <td className="py-3 px-2 text-gray-900">Total</td>
                       <td className="py-3 px-2 text-right text-green-600">{formatCurrency(totalIncome)}</td>
+                      <td className="py-3 px-2 text-right text-orange-600">
+                        {formatCurrency(fundingIncome.reduce((sum, item) => sum + item.realisasi, 0))}
+                      </td>
+                      <td className="py-3 px-2 text-right">
+                        <span className="text-sm font-medium px-2 py-1 rounded bg-blue-100 text-blue-700">
+                          {((fundingIncome.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1)}%
+                        </span>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

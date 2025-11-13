@@ -89,11 +89,11 @@ export const fundingCosts = [
 ];
 
 export const fundingIncome = [
-  { name: "Janji Iman", amount: 120000000 },
-  { name: "Penjualan Makanan", amount: 15000000 },
-  { name: "Lelang", amount: 45000000 },
-  { name: "Donatur", amount: 30000000 },
-  { name: "Ucapan Pentahbisan", amount: 12000000 }
+  { name: "Janji Iman", amount: 120000000, realisasi: 80000000 },
+  { name: "Penjualan Makanan", amount: 15000000, realisasi: 10000000 },
+  { name: "Lelang", amount: 45000000, realisasi: 20000000 },
+  { name: "Donatur", amount: 30000000, realisasi: 15000000 },
+  { name: "Ucapan Pentahbisan", amount: 12000000, realisasi: 5000000 }
 ];
 
 export const formatCurrency = (amount) => {
