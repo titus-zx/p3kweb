@@ -42,7 +42,7 @@ const TimelineCard = ({ item, index, showIcon }) => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
           } : {}}
         >
-          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current">
+          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current text-justify">
             <ReactMarkdown
               components={{
                 p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
@@ -109,7 +109,7 @@ const MobileTimelineCard = ({ item, index }) => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
           } : {}}
         >
-          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current">
+          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current text-justify">
             <ReactMarkdown
               components={{
                 p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
