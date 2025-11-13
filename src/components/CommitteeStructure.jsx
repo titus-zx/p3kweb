@@ -161,9 +161,11 @@ export const CommitteeStructure = () => {
                 {/* Bidang Kesekretariatan */}
                 <div>
                   <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKesekretariatan.coordinator}</h4>
-                  <div className="bg-gray-50 rounded-lg p-3 text-center">
-                    <div className="text-gray-700 font-medium">Titus Adi Prasetyo</div>
-                  </div>
+                    {committeeData.bidangKesekretariatan.members.map((member, index) => (
+                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                        <div className="text-gray-700 text-sm">{member}</div>
+                      </div>
+                    ))}
                 </div>
 
                 {/* Bidang Komunikasi & Informasi */}
@@ -172,7 +174,7 @@ export const CommitteeStructure = () => {
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                     {committeeData.bidangKomunikasi.members.map((member, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700">{member}</div>
+                        <div className="text-gray-700 text-sm">{member}</div>
                       </div>
                     ))}
                   </div>
@@ -184,7 +186,7 @@ export const CommitteeStructure = () => {
                   <div className="grid md:grid-cols-2 gap-3">
                     {committeeData.bidangAsesmen.members.map((member, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700">{member}</div>
+                        <div className="text-gray-700 text-sm">{member}</div>
                       </div>
                     ))}
                   </div>
@@ -196,7 +198,7 @@ export const CommitteeStructure = () => {
                   <div className="grid md:grid-cols-2 gap-3">
                     {committeeData.bidangIT.members.map((member, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700">{member}</div>
+                        <div className="text-gray-700 text-sm">{member}</div>
                       </div>
                     ))}
                   </div>
@@ -208,7 +210,7 @@ export const CommitteeStructure = () => {
                   <div className="grid md:grid-cols-3 gap-3">
                     {committeeData.bidangKeuangan.members.map((member, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700">{member}</div>
+                        <div className="text-gray-700 text-sm">{member}</div>
                       </div>
                     ))}
                   </div>
@@ -220,7 +222,7 @@ export const CommitteeStructure = () => {
                   <div className="grid md:grid-cols-2 gap-3">
                     {committeeData.bidangPrasarana.members.map((member, index) => (
                       <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700">{member}</div>
+                        <div className="text-gray-700 text-sm">{member}</div>
                       </div>
                     ))}
                   </div>
