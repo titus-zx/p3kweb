@@ -162,11 +162,11 @@ export const CommitteeStructure = () => {
                 <div>
                   <h4 className="font-bold text-gray-800 mb-2">{committeeData.bidangKesekretariatan.coordinator}</h4>
                   <div className="grid gap-3">
-                    {committeeData.bidangKesekretariatan.members.map((member, index) => (
-                      <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <div className="text-gray-700 text-sm">{member}</div>
-                      </div>
-                    ))}
+                  {committeeData.bidangKesekretariatan.members.map((member, index) => (
+                    <div key={index} className="bg-gray-50 rounded-lg p-3 text-center">
+                      <div className="text-gray-700 text-sm">{member}</div>
+                    </div>
+                  ))}
                   </div>
                 </div>
 
