@@ -3,6 +3,7 @@ import "./App.css";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Timeline } from "./components/Timeline";
+import { CommitteeStructure } from "./components/CommitteeStructure";
 import { CandidateProfile } from "./components/CandidateProfile";
 import { Funding } from "./components/Funding";
 import { Footer } from "./components/Footer";
@@ -13,6 +14,7 @@ function App() {
       <Header />
       <Hero />
       <Timeline />
+      <CommitteeStructure />
       <CandidateProfile />
       <Funding />
       <Footer />

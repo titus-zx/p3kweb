@@ -23,6 +23,9 @@ export const Header = () => {
             <a href="#timeline" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Alur Pemanggilan
             </a>
+            <a href="#committee" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              Susunan Panitia
+            </a>
             <a href="#candidate" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Profil Calon
             </a>
@@ -58,6 +61,13 @@ export const Header = () => {
                 className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
               >
                 Alur Pemanggilan
+              </a>
+              <a
+                href="#committee"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+              >
+                Susunan Panitia
               </a>
               <a
                 href="#candidate"

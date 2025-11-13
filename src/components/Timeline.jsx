@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { timelineData } from '../data/mock';
 import { CheckCircle, Circle, Star, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -33,7 +34,7 @@ const TimelineCard = ({ item, index, showIcon }) => {
       </div>
       <div className="relative flex-grow">
         <div 
-          className={`text-sm whitespace-pre-line overflow-hidden transition-all duration-300 ${
+          className={`text-sm overflow-hidden transition-all duration-300 ${
             !isExpanded && isLongContent ? 'max-h-[150px]' : 'max-h-none'
           }`}
           style={!isExpanded && isLongContent ? { 
@@ -41,7 +42,24 @@ const TimelineCard = ({ item, index, showIcon }) => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
           } : {}}
         >
-          {item.description}
+          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                ul: ({ children }) => <ul className="my-2 space-y-1 list-disc list-inside">{children}</ul>,
+                li: ({ children }) => <li className="ml-4">{children}</li>,
+                h1: ({ children }) => <h1 className="text-lg font-bold mt-3 mb-2 first:mt-0">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-base font-bold mt-3 mb-2 first:mt-0">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-bold mt-2 mb-1 first:mt-0">{children}</h3>,
+                h4: ({ children }) => <h4 className="text-sm font-semibold mt-2 mb-1 first:mt-0">{children}</h4>,
+                h5: ({ children }) => <h5 className="text-xs font-semibold mt-2 mb-1 first:mt-0">{children}</h5>,
+                h6: ({ children }) => <h6 className="text-xs font-medium mt-2 mb-1 first:mt-0">{children}</h6>,
+                blockquote: ({ children }) => <blockquote className="border-l-4 border-current bg-current bg-opacity-5 pl-3 py-2 my-2 italic">{children}</blockquote>
+              }}
+            >
+              {item.description}
+            </ReactMarkdown>
+          </div>
         </div>
         {isLongContent && (
           <button
@@ -83,7 +101,7 @@ const MobileTimelineCard = ({ item, index }) => {
       <h3 className="font-bold text-base mb-2">{item.title}</h3>
       <div className="relative">
         <div
-          className={`text-sm whitespace-pre-line overflow-hidden transition-all duration-300 ${
+          className={`text-sm overflow-hidden transition-all duration-300 ${
             !isExpanded && isLongContent ? 'max-h-[150px]' : 'max-h-none'
           }`}
           style={!isExpanded && isLongContent ? {
@@ -91,7 +109,24 @@ const MobileTimelineCard = ({ item, index }) => {
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)'
           } : {}}
         >
-          {item.description}
+          <div className="prose prose-sm max-w-none prose-headings:text-current prose-p:text-current prose-ul:text-current prose-li:text-current prose-strong:text-current prose-blockquote:text-current">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                ul: ({ children }) => <ul className="my-2 space-y-1 list-disc list-inside">{children}</ul>,
+                li: ({ children }) => <li className="ml-4">{children}</li>,
+                h1: ({ children }) => <h1 className="text-lg font-bold mt-3 mb-2 first:mt-0">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-base font-bold mt-3 mb-2 first:mt-0">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-sm font-bold mt-2 mb-1 first:mt-0">{children}</h3>,
+                h4: ({ children }) => <h4 className="text-sm font-semibold mt-2 mb-1 first:mt-0">{children}</h4>,
+                h5: ({ children }) => <h5 className="text-xs font-semibold mt-2 mb-1 first:mt-0">{children}</h5>,
+                h6: ({ children }) => <h6 className="text-xs font-medium mt-2 mb-1 first:mt-0">{children}</h6>,
+                blockquote: ({ children }) => <blockquote className="border-l-4 border-current bg-current bg-opacity-5 pl-3 py-2 my-2 italic">{children}</blockquote>
+              }}
+            >
+              {item.description}
+            </ReactMarkdown>
+          </div>
         </div>
         {isLongContent && (
           <button
@@ -190,13 +225,6 @@ export const Timeline = () => {
                 <MobileTimelineCard item={item} index={index} />
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-lg">
-            <Star className="w-5 h-5 text-red-600" fill="currentColor" />
-            <span className="text-sm font-medium text-red-700">Proses Saat Ini</span>
           </div>
         </div>
       </div>
