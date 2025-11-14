@@ -333,12 +333,12 @@ export const Funding = () => {
                             {formatCurrency(income.realisasi)}
                           </td>
                           <td className="py-3 px-2 text-right">
-                            <span className={`text-sm font-medium px-2 py-1 rounded ${
+                            <span className={`text-sm font-medium px-2 py-1 rounded flex items-center gap-1 ${
                               progress >= 80 ? 'bg-green-100 text-green-700' :
                               progress >= 50 ? 'bg-yellow-100 text-yellow-700' :
                               'bg-red-100 text-red-700'
                             }`}>
-                              {progress}%
+                              {progress >= 80 ? '✓' : progress >= 50 ? '◐' : '!'} {progress}%
                             </span>
                           </td>
                         </tr>
