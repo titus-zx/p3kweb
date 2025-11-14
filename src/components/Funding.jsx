@@ -6,8 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { TrendingUp, TrendingDown, DollarSign, Wallet, RefreshCw } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
-const INCOME_COLORS = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
-
 export const Funding = () => {
   const [liveIncomeData, setLiveIncomeData] = useState(null);
   const [loading, setLoading] = useState(true);
