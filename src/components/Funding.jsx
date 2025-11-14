@@ -113,7 +113,7 @@ export const Funding = () => {
               </span>
             )}
             
-            {!loading && !liveIncomeData && !error && (
+            {!loading && !liveIncomeData && !error && lastUpdated === null && (
               <span className="text-gray-500">Using static data</span>
             )}
           </div>
