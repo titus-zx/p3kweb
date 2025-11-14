@@ -1,25 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { fundingCosts, fundingIncome, formatCurrency, getTotalCosts, getTotalIncome } from '../data/mock';
+import { fetchFundingIncomeData, validateFundingData } from '../services/googleSheetsService';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Wallet } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Wallet, RefreshCw } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
 const INCOME_COLORS = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
 
 export const Funding = () => {
+  const [liveIncomeData, setLiveIncomeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Use live data if available, fallback to mock data
+  const currentIncomeData = liveIncomeData || fundingIncome;
+
   const totalCosts = getTotalCosts();
-  const totalIncome = getTotalIncome();
-  const totalRealisasi = fundingIncome.reduce((sum, item) => sum + item.realisasi, 0);
+  const totalIncome = currentIncomeData.reduce((sum, item) => sum + item.amount, 0);
+  const totalRealisasi = currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0);
   const balance = totalIncome - totalCosts;
   const actualBalance = totalRealisasi - totalCosts;
+
+  const loadFundingData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const data = await fetchFundingIncomeData();
+      
+      if (data && validateFundingData(data) && data.length > 0) {
+        setLiveIncomeData(data);
+        setLastUpdated(new Date());
+        console.log('Successfully loaded live funding data');
+      } else {
+        throw new Error('Invalid data format received');
+      }
+    } catch (err) {
+      console.error('Failed to load funding data:', err);
+      setError(err.message);
+      // Keep using mock data as fallback
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadFundingData();
+    
+    // Auto-refresh every 5 minutes
+    const interval = setInterval(loadFundingData, 5 * 60 * 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const costsChartData = fundingCosts.map(item => ({
     name: item.name,
     value: item.amount
   }));
 
-  const incomeChartData = fundingIncome.map(item => ({
+  const incomeChartData = currentIncomeData.map(item => ({
     name: item.name.length > 15 ? 
       item.name.replace('Penjualan Makanan', 'Penjualan\nMakanan')
               .replace('Ucapan Pentahbisan', 'Ucapan\nPentahbisan') 
@@ -45,10 +86,52 @@ export const Funding = () => {
     <section id="funding" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Pendanaan Pemanggilan Pendeta
-          </h2>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+              Pendanaan Pemanggilan Pendeta
+            </h2>
+            <button
+              onClick={loadFundingData}
+              disabled={loading}
+              className={`p-2 rounded-full transition-colors ${
+                loading 
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                  : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+              }`}
+              title="Refresh data"
+            >
+              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
           <p className="text-lg text-gray-600">Transparansi anggaran dan sumber pendanaan</p>
+          
+          {/* Data Status */}
+          <div className="flex items-center justify-center gap-2 mt-4 text-sm">
+            {loading && (
+              <span className="text-blue-600 flex items-center gap-1">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                Loading live data...
+              </span>
+            )}
+            
+            {!loading && lastUpdated && (
+              <span className="text-green-600 flex items-center gap-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Live data • Updated: {lastUpdated.toLocaleTimeString()}
+              </span>
+            )}
+            
+            {!loading && error && !liveIncomeData && (
+              <span className="text-amber-600 flex items-center gap-1">
+                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                Using fallback data • {error}
+              </span>
+            )}
+            
+            {!loading && !liveIncomeData && !error && (
+              <span className="text-gray-500">Using static data</span>
+            )}
+          </div>
         </div>
 
         {/* Summary Cards */}
@@ -75,7 +158,7 @@ export const Funding = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-bold text-green-600">{formatCurrency(totalIncome)}</p>
-              <p className="text-sm text-gray-600 mt-2">{fundingIncome.length} sumber penerimaan</p>
+              <p className="text-sm text-gray-600 mt-2">{currentIncomeData.length} sumber penerimaan</p>
             </CardContent>
           </Card>
 
@@ -230,7 +313,7 @@ export const Funding = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {fundingIncome.map((income, index) => {
+                    {currentIncomeData.map((income, index) => {
                       const progress = (income.realisasi / income.amount * 100).toFixed(1);
                       return (
                         <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
@@ -257,11 +340,11 @@ export const Funding = () => {
                       <td className="py-3 px-2 text-gray-900">Total</td>
                       <td className="py-3 px-2 text-right text-green-600">{formatCurrency(totalIncome)}</td>
                       <td className="py-3 px-2 text-right text-orange-600">
-                        {formatCurrency(fundingIncome.reduce((sum, item) => sum + item.realisasi, 0))}
+                        {formatCurrency(currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0))}
                       </td>
                       <td className="py-3 px-2 text-right">
                         <span className="text-sm font-medium px-2 py-1 rounded bg-blue-100 text-blue-700">
-                          {((fundingIncome.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1)}%
+                          {((currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1)}%
                         </span>
                       </td>
                     </tr>
