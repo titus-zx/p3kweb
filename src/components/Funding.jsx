@@ -20,7 +20,6 @@ export const Funding = () => {
   const totalCosts = getTotalCosts();
   const totalIncome = currentIncomeData.reduce((sum, item) => sum + item.amount, 0);
   const totalRealisasi = currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0);
-  const balance = totalIncome - totalCosts;
   const actualBalance = totalRealisasi - totalCosts;
 
   const loadFundingData = async () => {
