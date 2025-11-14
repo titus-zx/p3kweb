@@ -86,23 +86,9 @@ export const Funding = () => {
     <section id="funding" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Pendanaan Pemanggilan Pendeta
-            </h2>
-            <button
-              onClick={loadFundingData}
-              disabled={loading}
-              className={`p-2 rounded-full transition-colors ${
-                loading 
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-                  : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-              }`}
-              title="Refresh data"
-            >
-              <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Pendanaan Pemanggilan Pendeta
+          </h2>
           <p className="text-lg text-gray-600">Transparansi anggaran dan sumber pendanaan</p>
           
           {/* Data Status */}
@@ -117,7 +103,7 @@ export const Funding = () => {
             {!loading && lastUpdated && (
               <span className="text-green-600 flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Live data • Updated: {lastUpdated.toLocaleTimeString()}
+                Live data • Updated: {lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('en-GB', { hour12: false })}
               </span>
             )}
             
@@ -132,6 +118,21 @@ export const Funding = () => {
               <span className="text-gray-500">Using static data</span>
             )}
           </div>
+
+          {/* Refresh Button */}
+          <button
+            onClick={loadFundingData}
+            disabled={loading}
+            className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              loading 
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+            }`}
+            title="Refresh data"
+          >
+            <RefreshCw className={`w-4 h-4 inline mr-2 ${loading ? 'animate-spin' : ''}`} />
+            {loading ? 'Refreshing...' : 'Refresh Data'}
+          </button>
         </div>
 
         {/* Summary Cards */}
@@ -186,7 +187,7 @@ export const Funding = () => {
             </CardHeader>
             <CardContent>
               <p className={`text-3xl font-bold ${actualBalance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
-                {formatCurrency(actualBalance)}
+                {actualBalance >= 0 ? formatCurrency(actualBalance) : `(${formatCurrency(Math.abs(actualBalance))})`}
               </p>
               <p className="text-sm text-gray-600 mt-2">
                 {actualBalance >= 0 ? 'Realisasi positif' : 'Masih kekurangan'}
