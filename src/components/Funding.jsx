@@ -103,7 +103,7 @@ export const Funding = () => {
             {!loading && lastUpdated && (
               <span className="text-green-600 flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Live data • Updated: {lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('en-GB', { hour12: false })}
+                Live data • Updated: {lastUpdated.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('id-ID', { hour12: false })}
               </span>
             )}
             
