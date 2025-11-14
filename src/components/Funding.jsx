@@ -65,9 +65,9 @@ export const Funding = () => {
 
   const incomeChartData = currentIncomeData.map(item => ({
     name: item.name.length > 15 ? 
-      item.name.replace('Penjualan Makanan', 'Penjualan\nMakanan')
-              .replace('Ucapan Pentahbisan', 'Ucapan\nPentahbisan') 
-      : item.name,
+      item.name.split(' ').reduce((acc, word, i) => 
+        i > 0 && i % 2 === 0 ? acc + '\n' + word : acc + (i > 0 ? ' ' : '') + word, ''
+      ) : item.name,
     fullName: item.name,
     target: item.amount,
     realisasi: item.realisasi
