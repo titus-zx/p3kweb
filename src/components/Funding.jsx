@@ -180,7 +180,7 @@ export const Funding = () => {
             <CardContent>
               <p className="text-3xl font-bold text-orange-600">{formatCurrency(totalRealisasi)}</p>
               <p className="text-sm text-gray-600 mt-2">
-                {((totalRealisasi / totalIncome) * 100).toFixed(1)}% dari target
+                {totalIncome > 0 ? ((totalRealisasi / totalIncome) * 100).toFixed(1) : '0.0'}% dari target
               </p>
             </CardContent>
           </Card>
@@ -352,7 +352,7 @@ export const Funding = () => {
                       </td>
                       <td className="py-3 px-2 text-right">
                         <span className="text-sm font-medium px-2 py-1 rounded bg-blue-100 text-blue-700">
-                          {((currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1)}%
+                          {totalIncome > 0 ? ((currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1) : '0.0'}%
                         </span>
                       </td>
                     </tr>
