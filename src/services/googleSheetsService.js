@@ -45,7 +45,12 @@ export const fetchFundingIncomeData = async () => {
         const char = line[i];
         
         if (char === '"') {
-          inQuotes = !inQuotes;
+          if (inQuotes && line[i + 1] === '"') {
+            current += '"';
+            i++; // Skip the next quote
+          } else {
+            inQuotes = !inQuotes;
+          }
         } else if (char === ',' && !inQuotes) {
           values.push(current.trim());
           current = '';
