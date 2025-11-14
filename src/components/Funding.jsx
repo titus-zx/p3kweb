@@ -97,28 +97,34 @@ export const Funding = () => {
           {/* Data Status */}
           <div className="flex items-center justify-center gap-2 mt-4 text-sm">
             {loading && (
-              <span className="text-blue-600 flex items-center gap-1">
-                <RefreshCw className="w-4 h-4 animate-spin" />
+              <span className="text-blue-600 flex items-center gap-1" role="status" aria-live="polite">
+                <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
+                <span className="sr-only">Status: Loading live data</span>
                 Loading live data...
               </span>
             )}
             
             {!loading && lastUpdated && (
-              <span className="text-green-600 flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Live data • Updated: {lastUpdated.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('id-ID', { hour12: false })}
+              <span className="text-green-600 flex items-center gap-1" role="status" aria-live="polite">
+                <div className="w-2 h-2 bg-green-500 rounded-full" aria-hidden="true"></div>
+                <span className="sr-only">Status: Live data</span>
+                Live data • Updated: {lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('en-GB', { hour12: false })}
               </span>
             )}
             
             {!loading && error && !liveIncomeData && (
-              <span className="text-amber-600 flex items-center gap-1">
-                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                Using fallback data • Could not load live data
+              <span className="text-amber-600 flex items-center gap-1" role="status" aria-live="polite">
+                <div className="w-2 h-2 bg-amber-500 rounded-full" aria-hidden="true"></div>
+                <span className="sr-only">Status: Using fallback data</span>
+                Using fallback data • {error}
               </span>
             )}
             
-            {!loading && !liveIncomeData && !error && lastUpdated === null && (
-              <span className="text-gray-500">Using static data</span>
+            {!loading && !liveIncomeData && !error && (
+              <span className="text-gray-500" role="status" aria-live="polite">
+                <span className="sr-only">Status: Using static data</span>
+                Using static data
+              </span>
             )}
           </div>
 
