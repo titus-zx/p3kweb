@@ -29,12 +29,16 @@ export const Funding = () => {
       
       const data = await fetchFundingIncomeData();
       
-      if (data && validateFundingData(data) && data.length > 0) {
+      if (!data) {
+        throw new Error('Could not fetch data from Google Sheets');
+      } else if (!validateFundingData(data)) {
+        throw new Error('Invalid data format received');
+      } else if (data.length === 0) {
+        throw new Error('No income data available');
+      } else {
         setLiveIncomeData(data);
         setLastUpdated(new Date());
         console.log('Successfully loaded live funding data');
-      } else {
-        throw new Error('Invalid data format received');
       }
     } catch (err) {
       console.error('Failed to load funding data:', err);
