@@ -109,7 +109,7 @@ export const Funding = () => {
             {!loading && error && !liveIncomeData && (
               <span className="text-amber-600 flex items-center gap-1">
                 <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                Using fallback data • {error}
+                Using fallback data • Could not load live data
               </span>
             )}
             
