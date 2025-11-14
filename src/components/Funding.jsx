@@ -61,11 +61,15 @@ export const Funding = () => {
     value: item.amount
   }));
 
+  const formatChartLabel = (name, maxLength = 15) => {
+    if (name.length <= maxLength) return name;
+    return name.split(' ').reduce((acc, word, i) =>
+      i > 0 && i % 2 === 0 ? acc + '\n' + word : acc + (i > 0 ? ' ' : '') + word,
+    '');
+  };
+
   const incomeChartData = currentIncomeData.map(item => ({
-    name: item.name.length > 15 ? 
-      item.name.split(' ').reduce((acc, word, i) => 
-        i > 0 && i % 2 === 0 ? acc + '\n' + word : acc + (i > 0 ? ' ' : '') + word, ''
-      ) : item.name,
+    name: formatChartLabel(item.name),
     fullName: item.name,
     target: item.amount,
     realisasi: item.realisasi
@@ -97,7 +101,7 @@ export const Funding = () => {
             {loading && (
               <span className="text-blue-600 flex items-center gap-1" role="status" aria-live="polite">
                 <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
-                <span className="sr-only">Status: Loading live data</span>
+
                 Loading live data...
               </span>
             )}
@@ -106,7 +110,7 @@ export const Funding = () => {
               <span className="text-green-600 flex items-center gap-1" role="status" aria-live="polite">
                 <div className="w-2 h-2 bg-green-500 rounded-full" aria-hidden="true"></div>
                 <span className="sr-only">Status: Live data</span>
-                Live data • Updated: {lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('en-GB', { hour12: false })}
+                Live data • Updated: {lastUpdated.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('id-ID', { hour12: false })}
               </span>
             )}
             
@@ -322,7 +326,7 @@ export const Funding = () => {
                   </thead>
                   <tbody>
                     {currentIncomeData.map((income, index) => {
-                      const progress = (income.realisasi / income.amount * 100).toFixed(1);
+                      const progress = income.amount > 0 ? (income.realisasi / income.amount * 100).toFixed(1) : '0.0';
                       return (
                         <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                           <td className="py-3 px-2 text-gray-700">{income.name}</td>
