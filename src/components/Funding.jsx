@@ -3,7 +3,7 @@ import { fundingCosts, fundingIncome, formatCurrency, getTotalCosts, getTotalInc
 import { fetchFundingIncomeData, validateFundingData } from '../services/googleSheetsService';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Wallet, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, BanknoteArrowUp, Wallet, RefreshCw } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
 export const Funding = () => {
@@ -177,7 +177,7 @@ export const Funding = () => {
           <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-orange-50 to-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-orange-700">
-                <DollarSign className="w-5 h-5" />
+                <BanknoteArrowUp className="w-5 h-5" />
                 Realisasi Penerimaan
               </CardTitle>
             </CardHeader>
