@@ -30,8 +30,8 @@ export const fetchFundingIncomeData = async () => {
         .replace(/%/g, '')           // Remove percentage symbol
         .trim();
       
-      const number = parseInt(cleanValue) || 0;
-      return number;
+      const number = parseFloat(cleanValue) || 0;
+      return Math.floor(number); // Or Math.round(number) if rounding is preferred
     };
     
     // Parse CSV with proper handling of quoted values
