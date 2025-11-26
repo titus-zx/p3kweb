@@ -77,9 +77,13 @@ Berdasarkan Keputusan No.: **KEP 15/GKJP/X/2025 tanggal 28 Oktober 2025** majeli
 * Pnt. Leyla Mariana Harmanto (Majelis)
 * Pnt. Indrawati Sulistyo Rini (Majelis)
 
-**Tim Pembimbing** akan ditetapkan oleh Sidang XXII GKJ Klasis Jakarta Bagian Barat
-dan beranggotakan 4 (empat) orang Pendeta dengan masa pelayanan sekurang-
-kurangnya 5 (lima) tahun.
+**Tim Pembimbing** 
+Sesuai dengan Sidang Klasis JBB Tanggal 22 November 2025, bahwa Tim Pembimbing dan Tim Penguji dari Klasis dalam Proses Pemanggilan Pendeta Jemaat GKJ Pamulang adalah sebagai berikut:
+
+* Pdt. Em. Djoko Sulistyo [GKJ Eben Haezer] - TGTL dan Koordinator
+* Pdt. Widianto Nugroho [GKJ Joglo] - Sejarah
+* Pdt. Rudy Aryanto [GKJ Eben Haezer] - PPA GKJ
+* Pdt. Fransisca Natalia Handayani [GKJ Depok] - Khotbah dan Pastoral.
 `,
 
   ujian: `Ujian komprehensif yang harus dilalui calon pendeta sebagai syarat untuk melanjutkan ke tahap vikariat.`,
