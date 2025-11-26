@@ -186,7 +186,7 @@ export const JanjiImanPage = () => {
                       {formatCurrency(totalDonations)}
                     </div>
                     <p className="text-xs text-gray-500">
-                      Total komitmen pendanaan
+                      Total komitmen persembahan Janji Iman
                     </p>
                   </CardContent>
                 </Card>
@@ -349,7 +349,7 @@ export const JanjiImanPage = () => {
                     className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105 shadow-xl"
                   >
                     <Church className="w-6 h-6" />
-                    Buat Janji Iman Sekarang
+                    Daftar Sekarang
                   </a>
                   
                   <p className="mt-6 text-sm text-blue-100">
