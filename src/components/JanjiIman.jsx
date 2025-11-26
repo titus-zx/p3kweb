@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import { Alert, AlertDescription } from './ui/alert';
-import { Heart, Users, TrendingUp, ArrowLeft, Church } from 'lucide-react';
+import { Heart, Users, TrendingUp, ArrowLeft, Church, Loader2 } from 'lucide-react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
@@ -158,14 +158,18 @@ export const JanjiImanPage = () => {
         {/* Content Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {loading ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                {[1, 2, 3].map(i => (
-                  <Skeleton key={i} className="h-32" />
-                ))}
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="w-16 h-16 text-blue-600 animate-spin mb-6" />
+              <h3 className="text-2xl font-semibold text-gray-900 mb-2">Memuat Data Janji Iman</h3>
+              <p className="text-gray-600">Mohon tunggu sebentar...</p>
+              <div className="mt-8 w-full max-w-md">
+                <div className="grid grid-cols-1 gap-4">
+                  <Skeleton className="h-32 rounded-xl" />
+                  <Skeleton className="h-32 rounded-xl" />
+                  <Skeleton className="h-64 rounded-xl" />
+                </div>
               </div>
-              <Skeleton className="h-96" />
-            </>
+            </div>
           ) : error ? (
             <Alert variant="destructive">
               <AlertDescription>
