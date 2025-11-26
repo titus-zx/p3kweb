@@ -17,7 +17,7 @@ export const JanjiImanPage = () => {
       try {
         // Fetch promises data
         const promisesResponse = await fetch(
-          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=607813365&single=true&output=csv'
+          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=1295235575&single=true&output=csv'
         );
         
         // Fetch payments data
