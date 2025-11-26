@@ -1,0 +1,327 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Skeleton } from './ui/skeleton';
+import { Alert, AlertDescription } from './ui/alert';
+import { Heart, Users, TrendingUp, ArrowLeft, Church } from 'lucide-react';
+import { Header } from './Header';
+import { Footer } from './Footer';
+
+export const JanjiImanPage = () => {
+  const [donations, setDonations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDonations = async () => {
+      try {
+        // Fetch promises data
+        const promisesResponse = await fetch(
+          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=607813365&single=true&output=csv'
+        );
+        
+        // Fetch payments data
+        const paymentsResponse = await fetch(
+          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=492982096&single=true&output=csv'
+        );
+        
+        if (!promisesResponse.ok || !paymentsResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        // Parse promises
+        const promisesCsv = await promisesResponse.text();
+        const promisesLines = promisesCsv.trim().split('\n');
+        
+        const promisesData = promisesLines.slice(1).map(line => {
+          const values = line.split(',');
+          return {
+            phone: values[0],
+            wa_id: values[1],
+            name: values[2],
+            amount: parseInt(values[3]),
+            date: values[4],
+            type: values[5]
+          };
+        });
+
+        // Parse payments
+        const paymentsCsv = await paymentsResponse.text();
+        const paymentsLines = paymentsCsv.trim().split('\n');
+        
+        const paymentsMap = {};
+        paymentsLines.slice(1).forEach(line => {
+          const values = line.split(',');
+          const wa_id = values[0];
+          const amount = parseInt(values[3]);
+          
+          if (!paymentsMap[wa_id]) {
+            paymentsMap[wa_id] = {
+              totalPaid: 0,
+              payments: []
+            };
+          }
+          
+          paymentsMap[wa_id].totalPaid += amount;
+          paymentsMap[wa_id].payments.push({
+            date: values[1],
+            link: values[2],
+            amount: amount
+          });
+        });
+
+        // Combine data
+        const combinedData = promisesData.map(promise => ({
+          ...promise,
+          paid: paymentsMap[promise.wa_id]?.totalPaid || 0,
+          payments: paymentsMap[promise.wa_id]?.payments || [],
+          remaining: promise.amount - (paymentsMap[promise.wa_id]?.totalPaid || 0)
+        }));
+
+        setDonations(combinedData);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchDonations();
+  }, []);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('id-ID', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(date);
+  };
+
+  const maskName = (name) => {
+    return name.split(' ').map(word => {
+      if (word.length <= 2) return word;
+      const firstChar = word[0];
+      const lastChar = word[word.length - 1];
+      const middleLength = word.length - 2;
+      return firstChar + '*'.repeat(middleLength) + lastChar;
+    }).join(' ');
+  };
+
+  const totalDonations = donations.reduce((sum, donation) => sum + donation.amount, 0);
+  const totalDonors = donations.length;
+  const totalPaid = donations.reduce((sum, donation) => sum + donation.paid, 0);
+  const totalRemaining = totalDonations - totalPaid;
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-grow bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Link 
+              to="/" 
+              className="inline-flex items-center text-blue-100 hover:text-white transition-colors mb-6 group"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+              Kembali ke Beranda
+            </Link>
+            
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl">
+                <Church className="w-12 h-12" />
+              </div>
+              <div>
+                <h1 className="text-5xl font-bold mb-2">Janji Iman</h1>
+                <p className="text-xl text-blue-100">
+                  Persembahan untuk Pemanggilan Pendeta Kedua
+                </p>
+              </div>
+            </div>
+            
+            <p className="text-lg text-blue-50 max-w-3xl">
+              "Setiap orang harus memberikan menurut kerelaan hatinya, jangan dengan sedih hati atau karena paksaan, sebab Allah mengasihi orang yang memberi dengan sukacita." - 2 Korintus 9:7
+            </p>
+          </div>
+        </div>
+
+        {/* Content Section */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {loading ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                {[1, 2, 3].map(i => (
+                  <Skeleton key={i} className="h-32" />
+                ))}
+              </div>
+              <Skeleton className="h-96" />
+            </>
+          ) : error ? (
+            <Alert variant="destructive">
+              <AlertDescription>
+                Gagal memuat data: {error}
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <>
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <Card className="bg-white shadow-xl border-t-4 border-t-blue-500 hover:shadow-2xl transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-600">Total Komitmen</CardTitle>
+                    <Heart className="h-6 w-6 text-blue-500" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                      {formatCurrency(totalDonations)}
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Total komitmen pendanaan
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white shadow-xl border-t-4 border-t-green-500 hover:shadow-2xl transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-600">Sudah Dibayarkan</CardTitle>
+                    <TrendingUp className="h-6 w-6 text-green-500" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-green-600 mb-1">
+                      {formatCurrency(totalPaid)}
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      {((totalPaid / totalDonations) * 100).toFixed(1)}% dari total
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white shadow-xl border-t-4 border-t-orange-500 hover:shadow-2xl transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-600">Belum Dibayarkan</CardTitle>
+                    <Heart className="h-6 w-6 text-orange-500" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-orange-600 mb-1">
+                      {formatCurrency(totalRemaining)}
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Yang perlu dibayarkan
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white shadow-xl border-t-4 border-t-purple-500 hover:shadow-2xl transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-600">Jumlah Donatur</CardTitle>
+                    <Users className="h-6 w-6 text-purple-500" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-gray-900 mb-1">
+                      {totalDonors}
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Jemaat yang berkomitmen
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Donations List */}
+              <Card className="bg-white shadow-2xl">
+                <CardHeader className="border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-2xl">Daftar Komitmen Janji Iman</CardTitle>
+                      <CardDescription className="mt-1">
+                        Data terbaru dari sistem pendataan janji iman
+                      </CardDescription>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">Total Entri</p>
+                      <p className="text-2xl font-bold text-blue-600">{totalDonors}</p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200 bg-gray-50">
+                          <th className="text-left py-4 px-6 font-semibold text-gray-700">No</th>
+                          <th className="text-left py-4 px-6 font-semibold text-gray-700">Nama Jemaat</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Komitmen</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Dibayarkan</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Sisa</th>
+                          <th className="text-center py-4 px-6 font-semibold text-gray-700">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {donations.map((donation, index) => (
+                          <tr 
+                            key={`${donation.wa_id}-${index}`}
+                            className="border-b border-gray-100 hover:bg-blue-50 transition-colors"
+                          >
+                            <td className="py-4 px-6 text-gray-600 font-medium">{index + 1}</td>
+                            <td className="py-4 px-6 font-semibold text-gray-900">{maskName(donation.name)}</td>
+                            <td className="py-4 px-6 text-right font-bold text-blue-600">
+                              {formatCurrency(donation.amount)}
+                            </td>
+                            <td className="py-4 px-6 text-right font-bold text-green-600">
+                              {formatCurrency(donation.paid)}
+                            </td>
+                            <td className="py-4 px-6 text-right font-bold text-orange-600">
+                              {formatCurrency(donation.remaining)}
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              {donation.paid >= donation.amount ? (
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                  ✓ Lunas
+                                </span>
+                              ) : donation.paid > 0 ? (
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                                  Sebagian
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">
+                                  Belum
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Additional Info Section */}
+              <div className="mt-12 bg-white rounded-2xl shadow-lg p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Terima Kasih atas Komitmen Anda
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Setiap persembahan janji iman yang diberikan adalah bentuk dukungan nyata untuk proses pemanggilan pendeta kedua di GKJ Pamulang. 
+                  Komitmen Anda sangat berarti bagi perkembangan pelayanan gereja kita. Tuhan Yesus memberkati setiap pemberian dengan sukacita.
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};

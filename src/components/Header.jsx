@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img 
               src="/stempel.png" 
               alt="PPPK GKJP Logo" 
@@ -18,23 +21,42 @@ export const Header = () => {
               <h1 className="text-xl font-bold text-gray-900">GKJ Pamulang</h1>
               <p className="text-sm text-gray-600">Panitia Pemanggilan Pendeta Kedua</p>
             </div>
-          </div>
+          </Link>
           <nav className="hidden md:flex gap-6">
-            <a href="#timeline" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Alur Pemanggilan
-            </a>
-            <a href="#committee" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Susunan Panitia
-            </a>
-            <a href="#candidate" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Profil Calon
-            </a>
-            <a href="#funding" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-              Pendanaan
-            </a>
-            <a href="https://janjiiman.gkj-pamulang.org" target="_blank" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+            {isHomePage ? (
+              <>
+                <a href="#timeline" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Alur Pemanggilan
+                </a>
+                <a href="#committee" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Susunan Panitia
+                </a>
+                <a href="#candidate" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Profil Calon
+                </a>
+                <a href="#funding" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Pendanaan
+                </a>
+              </>
+            ) : (
+              <>
+                <Link to="/#timeline" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Alur Pemanggilan
+                </Link>
+                <Link to="/#committee" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Susunan Panitia
+                </Link>
+                <Link to="/#candidate" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Profil Calon
+                </Link>
+                <Link to="/#funding" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+                  Pendanaan
+                </Link>
+              </>
+            )}
+            <Link to="/janji-iman" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Janji Iman
-            </a>
+            </Link>
           </nav>
           
           {/* Mobile menu button */}
@@ -55,42 +77,76 @@ export const Header = () => {
         {mobileMenuOpen && (
           <nav className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col gap-3">
-              <a
-                href="#timeline"
+              {isHomePage ? (
+                <>
+                  <a
+                    href="#timeline"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Alur Pemanggilan
+                  </a>
+                  <a
+                    href="#committee"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Susunan Panitia
+                  </a>
+                  <a
+                    href="#candidate"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Profil Calon
+                  </a>
+                  <a
+                    href="#funding"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Pendanaan
+                  </a>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/#timeline"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Alur Pemanggilan
+                  </Link>
+                  <Link
+                    to="/#committee"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Susunan Panitia
+                  </Link>
+                  <Link
+                    to="/#candidate"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Profil Calon
+                  </Link>
+                  <Link
+                    to="/#funding"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
+                  >
+                    Pendanaan
+                  </Link>
+                </>
+              )}
+              <Link
+                to="/janji-iman"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
-              >
-                Alur Pemanggilan
-              </a>
-              <a
-                href="#committee"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
-              >
-                Susunan Panitia
-              </a>
-              <a
-                href="#candidate"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
-              >
-                Profil Calon
-              </a>
-              <a
-                href="#funding"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
-              >
-                Pendanaan
-              </a>
-              <a
-                href="https://janjiiman.gkj-pamulang.org"
-                onClick={() => setMobileMenuOpen(false)}
-                target="_blank"
                 className="text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-colors font-medium px-4 py-2 rounded-lg"
               >
                 Janji Iman
-              </a>
+              </Link>
             </div>
           </nav>
         )}
