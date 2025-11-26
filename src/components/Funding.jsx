@@ -3,11 +3,9 @@ import { fundingCosts, fundingIncome, formatCurrency, getTotalCosts, getTotalInc
 import { fetchFundingIncomeData, validateFundingData } from '../services/googleSheetsService';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Wallet, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, BanknoteArrowUp, Wallet, RefreshCw } from 'lucide-react';
 
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
-const INCOME_COLORS = ['#10B981', '#34D399', '#6EE7B7', '#A7F3D0', '#D1FAE5'];
-
 export const Funding = () => {
   const [liveIncomeData, setLiveIncomeData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +18,6 @@ export const Funding = () => {
   const totalCosts = getTotalCosts();
   const totalIncome = currentIncomeData.reduce((sum, item) => sum + item.amount, 0);
   const totalRealisasi = currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0);
-  const balance = totalIncome - totalCosts;
   const actualBalance = totalRealisasi - totalCosts;
 
   const loadFundingData = async () => {
@@ -30,12 +27,16 @@ export const Funding = () => {
       
       const data = await fetchFundingIncomeData();
       
-      if (data && validateFundingData(data) && data.length > 0) {
+      if (!data) {
+        throw new Error('Could not fetch data from Google Sheets');
+      } else if (!validateFundingData(data)) {
+        throw new Error('Invalid data format received');
+      } else if (data.length === 0) {
+        throw new Error('No income data available');
+      } else {
         setLiveIncomeData(data);
         setLastUpdated(new Date());
         console.log('Successfully loaded live funding data');
-      } else {
-        throw new Error('Invalid data format received');
       }
     } catch (err) {
       console.error('Failed to load funding data:', err);
@@ -60,11 +61,15 @@ export const Funding = () => {
     value: item.amount
   }));
 
+  const formatChartLabel = (name, maxLength = 15) => {
+    if (name.length <= maxLength) return name;
+    return name.split(' ').reduce((acc, word, i) =>
+      i > 0 && i % 2 === 0 ? acc + '\n' + word : acc + (i > 0 ? ' ' : '') + word,
+    '');
+  };
+
   const incomeChartData = currentIncomeData.map(item => ({
-    name: item.name.length > 15 ? 
-      item.name.replace('Penjualan Makanan', 'Penjualan\nMakanan')
-              .replace('Ucapan Pentahbisan', 'Ucapan\nPentahbisan') 
-      : item.name,
+    name: formatChartLabel(item.name),
     fullName: item.name,
     target: item.amount,
     realisasi: item.realisasi
@@ -94,28 +99,34 @@ export const Funding = () => {
           {/* Data Status */}
           <div className="flex items-center justify-center gap-2 mt-4 text-sm">
             {loading && (
-              <span className="text-blue-600 flex items-center gap-1">
-                <RefreshCw className="w-4 h-4 animate-spin" />
+              <span className="text-blue-600 flex items-center gap-1" role="status" aria-live="polite">
+                <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
+
                 Loading live data...
               </span>
             )}
             
             {!loading && lastUpdated && (
-              <span className="text-green-600 flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Live data • Updated: {lastUpdated.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('en-GB', { hour12: false })}
+              <span className="text-green-600 flex items-center gap-1" role="status" aria-live="polite">
+                <div className="w-2 h-2 bg-green-500 rounded-full" aria-hidden="true"></div>
+                <span className="sr-only">Status: Live data</span>
+                Live data • Updated: {lastUpdated.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })} {lastUpdated.toLocaleTimeString('id-ID', { hour12: false })}
               </span>
             )}
             
             {!loading && error && !liveIncomeData && (
-              <span className="text-amber-600 flex items-center gap-1">
-                <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+              <span className="text-amber-600 flex items-center gap-1" role="status" aria-live="polite">
+                <div className="w-2 h-2 bg-amber-500 rounded-full" aria-hidden="true"></div>
+                <span className="sr-only">Status: Using fallback data</span>
                 Using fallback data • {error}
               </span>
             )}
             
             {!loading && !liveIncomeData && !error && (
-              <span className="text-gray-500">Using static data</span>
+              <span className="text-gray-500" role="status" aria-live="polite">
+                <span className="sr-only">Status: Using static data</span>
+                Using static data
+              </span>
             )}
           </div>
 
@@ -166,14 +177,14 @@ export const Funding = () => {
           <Card className="shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-orange-50 to-white">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-orange-700">
-                <DollarSign className="w-5 h-5" />
+                <BanknoteArrowUp className="w-5 h-5" />
                 Realisasi Penerimaan
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-bold text-orange-600">{formatCurrency(totalRealisasi)}</p>
               <p className="text-sm text-gray-600 mt-2">
-                {((totalRealisasi / totalIncome) * 100).toFixed(1)}% dari target
+                {totalIncome > 0 ? ((totalRealisasi / totalIncome) * 100).toFixed(1) : '0.0'}% dari target
               </p>
             </CardContent>
           </Card>
@@ -315,7 +326,7 @@ export const Funding = () => {
                   </thead>
                   <tbody>
                     {currentIncomeData.map((income, index) => {
-                      const progress = (income.realisasi / income.amount * 100).toFixed(1);
+                      const progress = income.amount > 0 ? (income.realisasi / income.amount * 100).toFixed(1) : '0.0';
                       return (
                         <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                           <td className="py-3 px-2 text-gray-700">{income.name}</td>
@@ -326,12 +337,12 @@ export const Funding = () => {
                             {formatCurrency(income.realisasi)}
                           </td>
                           <td className="py-3 px-2 text-right">
-                            <span className={`text-sm font-medium px-2 py-1 rounded ${
+                            <span className={`text-sm font-medium px-2 py-1 rounded flex items-center gap-1 ${
                               progress >= 80 ? 'bg-green-100 text-green-700' :
                               progress >= 50 ? 'bg-yellow-100 text-yellow-700' :
                               'bg-red-100 text-red-700'
                             }`}>
-                              {progress}%
+                              {progress >= 80 ? '✓' : progress >= 50 ? '◐' : '!'} {progress}%
                             </span>
                           </td>
                         </tr>
@@ -345,7 +356,7 @@ export const Funding = () => {
                       </td>
                       <td className="py-3 px-2 text-right">
                         <span className="text-sm font-medium px-2 py-1 rounded bg-blue-100 text-blue-700">
-                          {((currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1)}%
+                          {totalIncome > 0 ? ((currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0) / totalIncome) * 100).toFixed(1) : '0.0'}%
                         </span>
                       </td>
                     </tr>

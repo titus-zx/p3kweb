@@ -30,8 +30,8 @@ export const fetchFundingIncomeData = async () => {
         .replace(/%/g, '')           // Remove percentage symbol
         .trim();
       
-      const number = parseInt(cleanValue) || 0;
-      return number;
+      const number = parseFloat(cleanValue) || 0;
+      return Math.floor(number); // Or Math.round(number) if rounding is preferred
     };
     
     // Parse CSV with proper handling of quoted values
@@ -45,7 +45,12 @@ export const fetchFundingIncomeData = async () => {
         const char = line[i];
         
         if (char === '"') {
-          inQuotes = !inQuotes;
+          if (inQuotes && line[i + 1] === '"') {
+            current += '"';
+            i++; // Skip the next quote
+          } else {
+            inQuotes = !inQuotes;
+          }
         } else if (char === ',' && !inQuotes) {
           values.push(current.trim());
           current = '';
