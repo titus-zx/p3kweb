@@ -316,6 +316,47 @@ export const JanjiImanPage = () => {
                   Komitmen Anda sangat berarti bagi perkembangan pelayanan gereja kita. Tuhan Yesus memberkati setiap pemberian dengan sukacita.
                 </p>
               </div>
+
+              {/* Call to Action Section */}
+              <div className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-2xl p-8 md:p-12 text-white">
+                <div className="max-w-3xl mx-auto text-center">
+                  <div className="mb-6">
+                    <Heart className="w-16 h-16 mx-auto mb-4 animate-pulse" />
+                    <h3 className="text-3xl font-bold mb-4">
+                      Mari Bersama Membangun Pelayanan
+                    </h3>
+                    <p className="text-lg text-blue-100 leading-relaxed mb-2">
+                      Jika Anda belum berpartisipasi dalam janji iman untuk pemanggilan pendeta kedua, kami mengundang Anda untuk turut serta dalam karya pelayanan yang mulia ini.
+                    </p>
+                    <p className="text-blue-50 leading-relaxed">
+                      Setiap komitmen, besar atau kecil, adalah wujud iman dan kasih kita kepada Tuhan serta dedikasi untuk pertumbuhan jemaat GKJ Pamulang.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6">
+                    <p className="text-sm text-blue-50 italic mb-3">
+                      "Janganlah tiap-tiap orang hanya memperhatikan kepentingannya sendiri, tetapi kepentingan orang lain juga."
+                    </p>
+                    <p className="text-xs text-blue-200">
+                      — Filipi 2:4
+                    </p>
+                  </div>
+
+                  <a
+                    href="https://janjiiman.gkj-pamulang.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105 shadow-xl"
+                  >
+                    <Church className="w-6 h-6" />
+                    Buat Janji Iman Sekarang
+                  </a>
+                  
+                  <p className="mt-6 text-sm text-blue-100">
+                    Proses mudah dan cepat, hanya memerlukan beberapa menit
+                  </p>
+                </div>
+              </div>
             </>
           )}
         </div>
