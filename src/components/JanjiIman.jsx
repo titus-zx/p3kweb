@@ -149,9 +149,9 @@ export const JanjiImanPage = () => {
               </div>
             </div>
             
-            <p className="text-lg text-blue-50 max-w-3xl">
+            {/* <p className="text-lg text-blue-50 max-w-3xl">
               "Setiap orang harus memberikan menurut kerelaan hatinya, jangan dengan sedih hati atau karena paksaan, sebab Allah mengasihi orang yang memberi dengan sukacita." - 2 Korintus 9:7
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -337,14 +337,14 @@ export const JanjiImanPage = () => {
                     </p>
                   </div>
                   
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6">
+                  {/* <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6">
                     <p className="text-sm text-blue-50 italic mb-3">
                       "Janganlah tiap-tiap orang hanya memperhatikan kepentingannya sendiri, tetapi kepentingan orang lain juga."
                     </p>
                     <p className="text-xs text-blue-200">
                       — Filipi 2:4
                     </p>
-                  </div>
+                  </div> */}
 
                   <a
                     href="https://janjiiman.gkj-pamulang.org"
