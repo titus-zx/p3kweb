@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import { Alert, AlertDescription } from './ui/alert';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Heart, Users, TrendingUp, ArrowLeft, Church, Loader2 } from 'lucide-react';
 import { Header } from './Header';
 import { Footer } from './Footer';
@@ -11,6 +13,8 @@ export const JanjiImanPage = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     const fetchDonations = async () => {
@@ -120,6 +124,22 @@ export const JanjiImanPage = () => {
   const totalDonors = donations.length;
   const totalPaid = donations.reduce((sum, donation) => sum + donation.paid, 0);
   const totalRemaining = totalDonations - totalPaid;
+
+  // Pagination logic
+  const totalPages = pageSize === 'all' ? 1 : Math.ceil(donations.length / pageSize);
+  const startIndex = pageSize === 'all' ? 0 : (currentPage - 1) * pageSize;
+  const endIndex = pageSize === 'all' ? donations.length : startIndex + pageSize;
+  const currentDonations = donations.slice(startIndex, endIndex);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (value) => {
+    const newPageSize = value === 'all' ? 'all' : parseInt(value);
+    setPageSize(newPageSize);
+    setCurrentPage(1); // Reset to first page when changing page size
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -244,40 +264,60 @@ export const JanjiImanPage = () => {
               {/* Donations List */}
               <Card className="bg-white shadow-2xl">
                 <CardHeader className="border-b border-gray-100">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
                       <CardTitle className="text-2xl">Daftar Komitmen Janji Iman</CardTitle>
                       <CardDescription className="mt-1">
                         Data terbaru dari sistem pendataan janji iman
                       </CardDescription>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Total Entri</p>
-                      <p className="text-2xl font-bold text-blue-600">{totalDonors}</p>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <label htmlFor="pageSize" className="text-sm font-medium text-gray-700">
+                          Tampilkan:
+                        </label>
+                        <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
+                          <SelectTrigger id="pageSize" className="w-24">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="5">5</SelectItem>
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="50">50</SelectItem>
+                            <SelectItem value="100">100</SelectItem>
+                            <SelectItem value="all">Semua</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <span className="text-sm text-gray-500">entri per halaman</span>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Total Entri</p>
+                        <p className="text-2xl font-bold text-blue-600">{totalDonors}</p>
+                      </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full table-fixed">
                       <thead>
                         <tr className="border-b border-gray-200 bg-gray-50">
-                          <th className="text-left py-4 px-6 font-semibold text-gray-700">No</th>
-                          <th className="text-left py-4 px-6 font-semibold text-gray-700">Nama Jemaat</th>
-                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Komitmen</th>
-                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Dibayarkan</th>
-                          <th className="text-right py-4 px-6 font-semibold text-gray-700">Sisa</th>
-                          <th className="text-center py-4 px-6 font-semibold text-gray-700">Status</th>
+                          <th className="text-left py-4 px-6 font-semibold text-gray-700 w-16">No</th>
+                          <th className="text-left py-4 px-6 font-semibold text-gray-700 w-48">Nama Jemaat</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Komitmen</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Dibayarkan</th>
+                          <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Sisa</th>
+                          <th className="text-center py-4 px-6 font-semibold text-gray-700 w-24">Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {donations.map((donation, index) => (
+                        {currentDonations.map((donation, index) => (
                           <tr 
                             key={`${donation.wa_id}-${index}`}
                             className="border-b border-gray-100 hover:bg-blue-50 transition-colors"
                           >
-                            <td className="py-4 px-6 text-gray-600 font-medium">{index + 1}</td>
-                            <td className="py-4 px-6 font-semibold text-gray-900">{maskName(donation.name)}</td>
+                            <td className="py-4 px-6 text-gray-600 font-medium">{startIndex + index + 1}</td>
+                            <td className="py-4 px-6 font-semibold text-gray-900 truncate" title={maskName(donation.name)}>{maskName(donation.name)}</td>
                             <td className="py-4 px-6 text-right font-bold text-blue-600">
                               {formatCurrency(donation.amount)}
                             </td>
@@ -307,6 +347,83 @@ export const JanjiImanPage = () => {
                       </tbody>
                     </table>
                   </div>
+                  
+                  {/* Pagination Controls */}
+                  {pageSize !== 'all' && totalPages > 1 && (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-gray-100">
+                      <div className="text-sm text-gray-500">
+                        Menampilkan {startIndex + 1} hingga {Math.min(endIndex, donations.length)} dari {donations.length} entri
+                      </div>
+                      
+                      <Pagination className="mx-0">
+                        <PaginationContent>
+                          {currentPage > 1 && (
+                            <PaginationItem>
+                              <PaginationPrevious 
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className="cursor-pointer"
+                              />
+                            </PaginationItem>
+                          )}
+                          
+                          {[...Array(totalPages)].map((_, i) => {
+                            const page = i + 1;
+                            const showPage = 
+                              page === 1 || 
+                              page === totalPages || 
+                              (page >= currentPage - 1 && page <= currentPage + 1);
+                            
+                            if (!showPage && page === currentPage - 2) {
+                              return (
+                                <PaginationItem key={`ellipsis-start`}>
+                                  <span className="flex h-9 w-9 items-center justify-center text-sm text-gray-500">...</span>
+                                </PaginationItem>
+                              );
+                            }
+                            
+                            if (!showPage && page === currentPage + 2) {
+                              return (
+                                <PaginationItem key={`ellipsis-end`}>
+                                  <span className="flex h-9 w-9 items-center justify-center text-sm text-gray-500">...</span>
+                                </PaginationItem>
+                              );
+                            }
+                            
+                            if (!showPage) return null;
+                            
+                            return (
+                              <PaginationItem key={page}>
+                                <PaginationLink
+                                  onClick={() => handlePageChange(page)}
+                                  isActive={currentPage === page}
+                                  className="cursor-pointer"
+                                >
+                                  {page}
+                                </PaginationLink>
+                              </PaginationItem>
+                            );
+                          })}
+                          
+                          {currentPage < totalPages && (
+                            <PaginationItem>
+                              <PaginationNext 
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                className="cursor-pointer"
+                              />
+                            </PaginationItem>
+                          )}
+                        </PaginationContent>
+                      </Pagination>
+                    </div>
+                  )}
+                  
+                  {pageSize === 'all' && (
+                    <div className="flex items-center justify-center px-6 py-4 border-t border-gray-100">
+                      <div className="text-sm text-gray-500">
+                        Menampilkan semua {donations.length} entri
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
