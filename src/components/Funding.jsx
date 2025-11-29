@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fundingCosts, fundingIncome, formatCurrency, getTotalCosts, getTotalIncome } from '../data/mock';
-import { fetchFundingIncomeData, validateFundingData } from '../services/googleSheetsService';
+import { fetchFundingIncomeData, validateFundingData, fetchFundingCostsData, validateCostsData } from '../services/googleSheetsService';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { TrendingUp, TrendingDown, BanknoteArrowUp, Wallet, RefreshCw } from 'lucide-react';
@@ -8,14 +8,16 @@ import { TrendingUp, TrendingDown, BanknoteArrowUp, Wallet, RefreshCw } from 'lu
 const COLORS = ['#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE', '#DBEAFE', '#EFF6FF', '#F1F5F9'];
 export const Funding = () => {
   const [liveIncomeData, setLiveIncomeData] = useState(null);
+  const [liveCostsData, setLiveCostsData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
 
   // Use live data if available, fallback to mock data
   const currentIncomeData = liveIncomeData || fundingIncome;
+  const currentCostsData = liveCostsData || fundingCosts;
 
-  const totalCosts = getTotalCosts();
+  const totalCosts = currentCostsData.reduce((sum, item) => sum + item.amount, 0);
   const totalIncome = currentIncomeData.reduce((sum, item) => sum + item.amount, 0);
   const totalRealisasi = currentIncomeData.reduce((sum, item) => sum + item.realisasi, 0);
   const actualBalance = totalRealisasi - totalCosts;
@@ -25,19 +27,50 @@ export const Funding = () => {
       setLoading(true);
       setError(null);
       
-      const data = await fetchFundingIncomeData();
+      // Fetch both income and costs data in parallel
+      const [incomeData, costsData] = await Promise.all([
+        fetchFundingIncomeData(),
+        fetchFundingCostsData()
+      ]);
       
-      if (!data) {
-        throw new Error('Could not fetch data from Google Sheets');
-      } else if (!validateFundingData(data)) {
-        throw new Error('Invalid data format received');
-      } else if (data.length === 0) {
-        throw new Error('No income data available');
+      let hasError = false;
+      let errorMessages = [];
+      
+      // Validate income data
+      if (!incomeData) {
+        errorMessages.push('Could not fetch income data');
+        hasError = true;
+      } else if (!validateFundingData(incomeData)) {
+        errorMessages.push('Invalid income data format');
+        hasError = true;
+      } else if (incomeData.length === 0) {
+        errorMessages.push('No income data available');
+        hasError = true;
       } else {
-        setLiveIncomeData(data);
-        setLastUpdated(new Date());
-        console.log('Successfully loaded live funding data');
+        setLiveIncomeData(incomeData);
       }
+      
+      // Validate costs data
+      if (!costsData) {
+        errorMessages.push('Could not fetch costs data');
+        hasError = true;
+      } else if (!validateCostsData(costsData)) {
+        errorMessages.push('Invalid costs data format');
+        hasError = true;
+      } else if (costsData.length === 0) {
+        errorMessages.push('No costs data available');
+        hasError = true;
+      } else {
+        setLiveCostsData(costsData);
+      }
+      
+      if (hasError) {
+        throw new Error(errorMessages.join('; '));
+      }
+      
+      setLastUpdated(new Date());
+      console.log('Successfully loaded live funding data');
+      
     } catch (err) {
       console.error('Failed to load funding data:', err);
       setError(err.message);
@@ -56,7 +89,7 @@ export const Funding = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const costsChartData = fundingCosts.map(item => ({
+  const costsChartData = currentCostsData.map(item => ({
     name: item.name,
     value: item.amount
   }));
@@ -157,7 +190,7 @@ export const Funding = () => {
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-bold text-red-600">{formatCurrency(totalCosts)}</p>
-              <p className="text-sm text-gray-600 mt-2">{fundingCosts.length} kategori pengeluaran</p>
+              <p className="text-sm text-gray-600 mt-2">{currentCostsData.length} kategori pengeluaran</p>
             </CardContent>
           </Card>
 
@@ -286,21 +319,28 @@ export const Funding = () => {
                   <thead>
                     <tr className="border-b-2 border-gray-200">
                       <th className="text-left py-3 px-2 font-semibold text-gray-700">Kategori</th>
-                      <th className="text-right py-3 px-2 font-semibold text-gray-700">Jumlah</th>
+                      <th className="text-right py-3 px-2 font-semibold text-gray-700">Anggaran</th>
+                      <th className="text-right py-3 px-2 font-semibold text-gray-700">Realisasi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {fundingCosts.map((cost, index) => (
+                    {currentCostsData.map((cost, index) => (
                       <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="py-3 px-2 text-gray-700">{cost.name}</td>
                         <td className="py-3 px-2 text-right font-semibold text-gray-900">
                           {formatCurrency(cost.amount)}
+                        </td>
+                        <td className="py-3 px-2 text-right font-semibold text-blue-600">
+                          {cost.realisasi ? formatCurrency(cost.realisasi) : '-'}
                         </td>
                       </tr>
                     ))}
                     <tr className="border-t-2 border-gray-300 font-bold">
                       <td className="py-3 px-2 text-gray-900">Total</td>
                       <td className="py-3 px-2 text-right text-red-600">{formatCurrency(totalCosts)}</td>
+                      <td className="py-3 px-2 text-right text-blue-600">
+                        {formatCurrency(currentCostsData.reduce((sum, item) => sum + (item.realisasi || 0), 0))}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
