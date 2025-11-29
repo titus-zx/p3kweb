@@ -89,17 +89,19 @@ export const Funding = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const costsChartData = currentCostsData.map(item => ({
-    name: item.name,
-    value: item.amount
-  }));
-
   const formatChartLabel = (name, maxLength = 15) => {
     if (name.length <= maxLength) return name;
     return name.split(' ').reduce((acc, word, i) =>
       i > 0 && i % 2 === 0 ? acc + '\n' + word : acc + (i > 0 ? ' ' : '') + word,
     '');
   };
+
+  const costsChartData = currentCostsData.map(item => ({
+    name: formatChartLabel(item.name),
+    fullName: item.name,
+    anggaran: item.amount,
+    realisasi: item.realisasi || 0
+  }));
 
   const incomeChartData = currentIncomeData.map(item => ({
     name: formatChartLabel(item.name),
@@ -242,30 +244,37 @@ export const Funding = () => {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          {/* Costs Pie Chart */}
+          {/* Costs Bar Chart */}
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Distribusi Biaya</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={400}>
-                <PieChart>
-                  <Pie
-                    data={costsChartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
-                    outerRadius={120}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {costsChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip />} />
-                </PieChart>
+                <BarChart data={costsChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis 
+                    dataKey="name" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={120} 
+                    tick={{ fontSize: 10, lineHeight: 1.2 }}
+                    interval={0}
+                    tickLine={false}
+                  />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(value)}
+                    labelFormatter={(label) => {
+                      const item = costsChartData.find(d => d.name === label);
+                      return item?.fullName || label;
+                    }}
+                    contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb' }}
+                  />
+                  <Legend />
+                  <Bar dataKey="anggaran" fill="#EF4444" name="Anggaran" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="realisasi" fill="#F59E0B" name="Realisasi" radius={[4, 4, 0, 0]} />
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
