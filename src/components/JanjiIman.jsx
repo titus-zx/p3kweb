@@ -11,18 +11,22 @@ import { Footer } from './Footer';
 
 export const JanjiImanPage = () => {
   const [donations, setDonations] = useState([]);
+  const [allDonations, setAllDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     const fetchDonations = async () => {
       try {
-        // Fetch combined data from single CSV source
-        const response = await fetch(
-          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=1193523379&single=true&output=csv'
-        );
+        setLoading(true);
+        // Build URL with search filter if provided
+        const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
+        const url = searchInput ? `${baseUrl}?col1=${encodeURIComponent(searchInput)}` : baseUrl;
+        
+        const response = await fetch(url);
         
         if (!response.ok) {
           throw new Error('Failed to fetch data');
@@ -60,7 +64,7 @@ export const JanjiImanPage = () => {
           return parseInt(cleanValue) || 0;
         };
         
-        // Parse data (CSV without header: nama, komitmen, pembayaran, tipe)
+        // Parse data (CSV format: nama, komitmen, pembayaran, tipe)
         const parsedData = lines.map((line, index) => {
           const values = parseCSVLine(line);
           
@@ -76,8 +80,9 @@ export const JanjiImanPage = () => {
             remaining: amount - paid,
             type: type
           };
-        }).filter(item => item.name && item.amount > 0);
+          }).filter(item => item.name && item.amount > 0);
 
+        setAllDonations(parsedData);
         setDonations(parsedData);
         setLoading(false);
       } catch (err) {
@@ -88,6 +93,88 @@ export const JanjiImanPage = () => {
 
     fetchDonations();
   }, []);
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      const fetchDonations = async () => {
+        try {
+          setLoading(true);
+          const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
+          const url = searchInput ? `${baseUrl}?col1=${encodeURIComponent(searchInput)}` : baseUrl;
+          
+          const response = await fetch(url);
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+
+          const csvText = await response.text();
+          const lines = csvText.trim().split('\n');
+          
+          const parseCSVLine = (line) => {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+            return values;
+          };
+          
+          const parseCurrency = (value) => {
+            if (!value) return 0;
+            const cleanValue = value.replace(/"/g, '').replace(/,/g, '').trim();
+            return parseInt(cleanValue) || 0;
+          };
+          
+          const parsedData = lines.map((line, index) => {
+            const values = parseCSVLine(line);
+            
+            const name = values[0] || '';
+            const amount = parseCurrency(values[1]);
+            const paid = parseCurrency(values[2]);
+            const type = values[3] || 'online';
+            
+            return {
+              name: name,
+              amount: amount,
+              paid: paid,
+              remaining: amount - paid,
+              type: type
+            };
+          }).filter(item => item.name && item.amount > 0);
+
+          setDonations(parsedData);
+          setLoading(false);
+        } catch (err) {
+          setError(err.message);
+          setLoading(false);
+        }
+      };
+      
+      if (searchInput) {
+        fetchDonations();
+      } else {
+        setDonations(allDonations);
+        setLoading(false);
+      }
+    }, 500); // 500ms debounce delay
+
+    return () => clearTimeout(timer);
+  }, [searchInput, allDonations]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('id-ID', {
@@ -108,9 +195,9 @@ export const JanjiImanPage = () => {
 
 
 
-  const totalDonations = donations.reduce((sum, donation) => sum + donation.amount, 0);
-  const totalDonors = donations.length;
-  const totalPaid = donations.reduce((sum, donation) => sum + donation.paid, 0);
+  const totalDonations = allDonations.reduce((sum, donation) => sum + donation.amount, 0);
+  const totalDonors = allDonations.length;
+  const totalPaid = allDonations.reduce((sum, donation) => sum + donation.paid, 0);
   const totalRemaining = totalDonations - totalPaid;
 
   // Pagination logic
@@ -165,7 +252,7 @@ export const JanjiImanPage = () => {
 
         {/* Content Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {loading ? (
+          {loading && !searchInput && allDonations.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="w-16 h-16 text-blue-600 animate-spin mb-6" />
               <h3 className="text-2xl font-semibold text-gray-900 mb-2">Memuat Data Janji Iman</h3>
@@ -245,6 +332,54 @@ export const JanjiImanPage = () => {
                     <p className="text-xs text-gray-500">
                       Jemaat yang berkomitmen
                     </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Search Filter */}
+              <div className="mb-8">
+                <Card className="bg-white shadow-lg">
+                  <CardContent className="pt-6">
+                    <div className="relative">
+                      <label htmlFor="searchName" className="block text-sm font-medium text-gray-700 mb-2">
+                        Cari berdasarkan Nama
+                      </label>
+                      <div className="relative">
+                        <input
+                          id="searchName"
+                          type="text"
+                          value={searchInput}
+                          onChange={(e) => setSearchInput(e.target.value)}
+                          placeholder="Ketik nama untuk mencari... (otomatis mencari setelah berhenti mengetik)"
+                          className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                        {loading && searchInput && (
+                          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                          </div>
+                        )}
+                      </div>
+                      {searchInput && (
+                        <div className="mt-3 flex items-center justify-between">
+                          <div className="text-sm text-gray-600">
+                            {loading ? (
+                              <span className="text-blue-600">Mencari data...</span>
+                            ) : (
+                              <span>
+                                Hasil pencarian untuk: <span className="font-semibold text-gray-900">"{searchInput}"</span>
+                                {' '}({donations.length} data ditemukan)
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => setSearchInput('')}
+                            className="text-sm text-gray-500 hover:text-gray-700 underline"
+                          >
+                            Hapus pencarian
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
