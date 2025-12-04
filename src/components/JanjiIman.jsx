@@ -19,70 +19,66 @@ export const JanjiImanPage = () => {
   useEffect(() => {
     const fetchDonations = async () => {
       try {
-        // Fetch promises data
-        const promisesResponse = await fetch(
-          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=1295235575&single=true&output=csv'
+        // Fetch combined data from single CSV source
+        const response = await fetch(
+          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=1193523379&single=true&output=csv'
         );
         
-        // Fetch payments data
-        const paymentsResponse = await fetch(
-          'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmdFLM2dd1tJrsW8OIZL1s1sFtqnQo653m7B8aB3G44Cw39rIds8mg-D10s-XVyz7wLcoleZ62_R83/pub?gid=492982096&single=true&output=csv'
-        );
-        
-        if (!promisesResponse.ok || !paymentsResponse.ok) {
+        if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
 
-        // Parse promises
-        const promisesCsv = await promisesResponse.text();
-        const promisesLines = promisesCsv.trim().split('\n');
+        const csvText = await response.text();
+        const lines = csvText.trim().split('\n');
         
-        const promisesData = promisesLines.slice(1).map(line => {
-          const values = line.split(',');
-          return {
-            phone: values[0],
-            wa_id: values[1],
-            name: values[2],
-            amount: parseInt(values[3]),
-            date: values[4],
-            type: values[5]
-          };
-        });
-
-        // Parse payments
-        const paymentsCsv = await paymentsResponse.text();
-        const paymentsLines = paymentsCsv.trim().split('\n');
-        
-        const paymentsMap = {};
-        paymentsLines.slice(1).forEach(line => {
-          const values = line.split(',');
-          const wa_id = values[0];
-          const amount = parseInt(values[3]);
+        // Helper function to parse CSV line with quoted values
+        const parseCSVLine = (line) => {
+          const values = [];
+          let current = '';
+          let inQuotes = false;
           
-          if (!paymentsMap[wa_id]) {
-            paymentsMap[wa_id] = {
-              totalPaid: 0,
-              payments: []
-            };
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              values.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
           }
+          values.push(current.trim());
+          return values;
+        };
+        
+        // Helper function to parse Indonesian currency format
+        const parseCurrency = (value) => {
+          if (!value) return 0;
+          const cleanValue = value.replace(/"/g, '').replace(/,/g, '').trim();
+          return parseInt(cleanValue) || 0;
+        };
+        
+        // Parse data (CSV without header: nama, komitmen, pembayaran, tipe)
+        const parsedData = lines.map((line, index) => {
+          const values = parseCSVLine(line);
           
-          paymentsMap[wa_id].totalPaid += amount;
-          paymentsMap[wa_id].payments.push({
-            date: values[1],
-            link: values[2],
-            amount: amount
-          });
-        });
+          const name = values[0] || '';
+          const amount = parseCurrency(values[1]);
+          const paid = parseCurrency(values[2]);
+          const type = values[3] || 'online';
+          
+          return {
+            name: name,
+            amount: amount,
+            paid: paid,
+            remaining: amount - paid,
+            type: type
+          };
+        }).filter(item => item.name && item.amount > 0);
 
-        // Combine data
-        const combinedData = promisesData.map(promise => ({
-          ...promise,
-          paid: paymentsMap[promise.wa_id]?.totalPaid || 0,
-          payments: paymentsMap[promise.wa_id]?.payments || [],
-          remaining: promise.amount - (paymentsMap[promise.wa_id]?.totalPaid || 0)
-        }));
-
-        setDonations(combinedData);
+        setDonations(parsedData);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -110,15 +106,7 @@ export const JanjiImanPage = () => {
     }).format(date);
   };
 
-  const maskName = (name) => {
-    return name.split(' ').map(word => {
-      if (word.length <= 2) return word;
-      const firstChar = word[0];
-      const lastChar = word[word.length - 1];
-      const middleLength = word.length - 2;
-      return firstChar + '*'.repeat(middleLength) + lastChar;
-    }).join(' ');
-  };
+
 
   const totalDonations = donations.reduce((sum, donation) => sum + donation.amount, 0);
   const totalDonors = donations.length;
@@ -307,17 +295,18 @@ export const JanjiImanPage = () => {
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Komitmen</th>
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Dibayarkan</th>
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Sisa</th>
+                          <th className="text-center py-4 px-6 font-semibold text-gray-700 w-24">Tipe</th>
                           <th className="text-center py-4 px-6 font-semibold text-gray-700 w-24">Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {currentDonations.map((donation, index) => (
                           <tr 
-                            key={`${donation.wa_id}-${index}`}
+                            key={`${donation.name}-${index}`}
                             className="border-b border-gray-100 hover:bg-blue-50 transition-colors"
                           >
                             <td className="py-4 px-6 text-gray-600 font-medium">{startIndex + index + 1}</td>
-                            <td className="py-4 px-6 font-semibold text-gray-900 truncate" title={maskName(donation.name)}>{maskName(donation.name)}</td>
+                            <td className="py-4 px-6 font-semibold text-gray-900 truncate" title={donation.name}>{donation.name}</td>
                             <td className="py-4 px-6 text-right font-bold text-blue-600">
                               {formatCurrency(donation.amount)}
                             </td>
@@ -326,6 +315,15 @@ export const JanjiImanPage = () => {
                             </td>
                             <td className="py-4 px-6 text-right font-bold text-orange-600">
                               {formatCurrency(donation.remaining)}
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                                donation.type === 'kartu' 
+                                  ? 'bg-purple-100 text-purple-800' 
+                                  : 'bg-blue-100 text-blue-800'
+                              }`}>
+                                {donation.type === 'kartu' ? 'Kartu' : 'Online'}
+                              </span>
                             </td>
                             <td className="py-4 px-6 text-center">
                               {donation.paid >= donation.amount ? (
