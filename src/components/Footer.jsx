@@ -47,16 +47,16 @@ export const Footer = () => {
           <div>
             <h4 className="font-bold text-lg mb-4">Menu</h4>
             <div className="space-y-2">
-              <a href="#timeline" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/#timeline" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Alur Pemanggilan
               </a>
-              <a href="#committee" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/#committee" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Susunan Panitia
               </a>
-              <a href="#candidate" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/#candidate" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Profil Calon Pendeta
               </a>
-              <a href="#funding" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/#funding" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Pendanaan
               </a>
               <a href="/janji-iman" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
