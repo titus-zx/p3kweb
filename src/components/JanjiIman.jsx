@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Skeleton } from './ui/skeleton';
@@ -9,6 +9,53 @@ import { Heart, Users, TrendingUp, ArrowLeft, Church, Loader2 } from 'lucide-rea
 import { Header } from './Header';
 import { Footer } from './Footer';
 
+// Helper functions moved outside component to prevent recreation
+const parseCSVLine = (line) => {
+  const values = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      values.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  values.push(current.trim());
+  return values;
+};
+
+const parseCurrency = (value) => {
+  if (!value) return 0;
+  const cleanValue = value.replace(/"/g, '').replace(/,/g, '').trim();
+  return parseInt(cleanValue) || 0;
+};
+
+const parseCSVData = (csvText) => {
+  const lines = csvText.trim().split('\n');
+  return lines.map((line) => {
+    const values = parseCSVLine(line);
+    const name = values[0] || '';
+    const amount = parseCurrency(values[1]);
+    const paid = parseCurrency(values[2]);
+    const type = values[3] || 'online';
+    
+    return {
+      name,
+      amount,
+      paid,
+      remaining: amount - paid,
+      type
+    };
+  }).filter(item => item.name && item.amount > 0);
+};
+
 export const JanjiImanPage = () => {
   const [donations, setDonations] = useState([]);
   const [allDonations, setAllDonations] = useState([]);
@@ -18,70 +65,20 @@ export const JanjiImanPage = () => {
   const [pageSize, setPageSize] = useState(10);
   const [searchInput, setSearchInput] = useState('');
 
+  // Initial data fetch
   useEffect(() => {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        // Build URL with search filter if provided
         const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
-        const url = searchInput ? `${baseUrl}?col1=${encodeURIComponent(searchInput)}` : baseUrl;
-        
-        const response = await fetch(url);
+        const response = await fetch(baseUrl);
         
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
 
         const csvText = await response.text();
-        const lines = csvText.trim().split('\n');
-        
-        // Helper function to parse CSV line with quoted values
-        const parseCSVLine = (line) => {
-          const values = [];
-          let current = '';
-          let inQuotes = false;
-          
-          for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            
-            if (char === '"') {
-              inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-              values.push(current.trim());
-              current = '';
-            } else {
-              current += char;
-            }
-          }
-          values.push(current.trim());
-          return values;
-        };
-        
-        // Helper function to parse Indonesian currency format
-        const parseCurrency = (value) => {
-          if (!value) return 0;
-          const cleanValue = value.replace(/"/g, '').replace(/,/g, '').trim();
-          return parseInt(cleanValue) || 0;
-        };
-        
-        // Parse data (CSV format: nama, komitmen, pembayaran, tipe)
-        const parsedData = lines.map((line, index) => {
-          const values = parseCSVLine(line);
-          
-          const name = values[0] || '';
-          const amount = parseCurrency(values[1]);
-          const paid = parseCurrency(values[2]);
-          const type = values[3] || 'online';
-          
-          return {
-            name: name,
-            amount: amount,
-            paid: paid,
-            remaining: amount - paid,
-            type: type
-          };
-          }).filter(item => item.name && item.amount > 0);
-
+        const parsedData = parseCSVData(csvText);
         setAllDonations(parsedData);
         setDonations(parsedData);
         setLoading(false);
@@ -94,16 +91,21 @@ export const JanjiImanPage = () => {
     fetchDonations();
   }, []);
 
-  // Debounce search input
+  // Backend search with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
       setCurrentPage(1);
-      const fetchDonations = async () => {
+      
+      const fetchFilteredDonations = async () => {
+        if (!searchInput.trim()) {
+          setDonations(allDonations);
+          return;
+        }
+
         try {
           setLoading(true);
           const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
-          const url = searchInput ? `${baseUrl}?col1=${encodeURIComponent(searchInput)}` : baseUrl;
-          
+          const url = `${baseUrl}?col1=${encodeURIComponent(searchInput)}`;
           const response = await fetch(url);
           
           if (!response.ok) {
@@ -111,52 +113,7 @@ export const JanjiImanPage = () => {
           }
 
           const csvText = await response.text();
-          const lines = csvText.trim().split('\n');
-          
-          const parseCSVLine = (line) => {
-            const values = [];
-            let current = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < line.length; i++) {
-              const char = line[i];
-              
-              if (char === '"') {
-                inQuotes = !inQuotes;
-              } else if (char === ',' && !inQuotes) {
-                values.push(current.trim());
-                current = '';
-              } else {
-                current += char;
-              }
-            }
-            values.push(current.trim());
-            return values;
-          };
-          
-          const parseCurrency = (value) => {
-            if (!value) return 0;
-            const cleanValue = value.replace(/"/g, '').replace(/,/g, '').trim();
-            return parseInt(cleanValue) || 0;
-          };
-          
-          const parsedData = lines.map((line, index) => {
-            const values = parseCSVLine(line);
-            
-            const name = values[0] || '';
-            const amount = parseCurrency(values[1]);
-            const paid = parseCurrency(values[2]);
-            const type = values[3] || 'online';
-            
-            return {
-              name: name,
-              amount: amount,
-              paid: paid,
-              remaining: amount - paid,
-              type: type
-            };
-          }).filter(item => item.name && item.amount > 0);
-
+          const parsedData = parseCSVData(csvText);
           setDonations(parsedData);
           setLoading(false);
         } catch (err) {
@@ -165,56 +122,52 @@ export const JanjiImanPage = () => {
         }
       };
       
-      if (searchInput) {
-        fetchDonations();
-      } else {
-        setDonations(allDonations);
-        setLoading(false);
-      }
+      fetchFilteredDonations();
     }, 500); // 500ms debounce delay
 
     return () => clearTimeout(timer);
   }, [searchInput, allDonations]);
 
-  const formatCurrency = (amount) => {
+  // Memoize formatters to prevent recreation
+  const formatCurrency = useCallback((amount) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0
     }).format(amount);
-  };
+  }, []);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('id-ID', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(date);
-  };
+  // Memoize statistics calculations
+  const statistics = useMemo(() => {
+    const totalDonations = allDonations.reduce((sum, donation) => sum + donation.amount, 0);
+    const totalPaid = allDonations.reduce((sum, donation) => sum + donation.paid, 0);
+    return {
+      totalDonations,
+      totalDonors: allDonations.length,
+      totalPaid,
+      totalRemaining: totalDonations - totalPaid
+    };
+  }, [allDonations]);
 
+  // Memoize pagination logic
+  const paginationData = useMemo(() => {
+    const totalPages = pageSize === 'all' ? 1 : Math.ceil(donations.length / pageSize);
+    const startIndex = pageSize === 'all' ? 0 : (currentPage - 1) * pageSize;
+    const endIndex = pageSize === 'all' ? donations.length : startIndex + pageSize;
+    const currentDonations = donations.slice(startIndex, endIndex);
+    
+    return { totalPages, startIndex, endIndex, currentDonations };
+  }, [donations, currentPage, pageSize]);
 
-
-  const totalDonations = allDonations.reduce((sum, donation) => sum + donation.amount, 0);
-  const totalDonors = allDonations.length;
-  const totalPaid = allDonations.reduce((sum, donation) => sum + donation.paid, 0);
-  const totalRemaining = totalDonations - totalPaid;
-
-  // Pagination logic
-  const totalPages = pageSize === 'all' ? 1 : Math.ceil(donations.length / pageSize);
-  const startIndex = pageSize === 'all' ? 0 : (currentPage - 1) * pageSize;
-  const endIndex = pageSize === 'all' ? donations.length : startIndex + pageSize;
-  const currentDonations = donations.slice(startIndex, endIndex);
-
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page);
-  };
+  }, []);
 
-  const handlePageSizeChange = (value) => {
+  const handlePageSizeChange = useCallback((value) => {
     const newPageSize = value === 'all' ? 'all' : parseInt(value);
     setPageSize(newPageSize);
-    setCurrentPage(1); // Reset to first page when changing page size
-  };
+    setCurrentPage(1);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -282,7 +235,7 @@ export const JanjiImanPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold text-gray-900 mb-1">
-                      {formatCurrency(totalDonations)}
+                      {formatCurrency(statistics.totalDonations)}
                     </div>
                     <p className="text-xs text-gray-500">
                       Total komitmen persembahan Janji Iman
@@ -297,10 +250,10 @@ export const JanjiImanPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold text-green-600 mb-1">
-                      {formatCurrency(totalPaid)}
+                      {formatCurrency(statistics.totalPaid)}
                     </div>
                     <p className="text-xs text-gray-500">
-                      {((totalPaid / totalDonations) * 100).toFixed(1)}% dari total
+                      {((statistics.totalPaid / statistics.totalDonations) * 100).toFixed(1)}% dari total
                     </p>
                   </CardContent>
                 </Card>
@@ -312,7 +265,7 @@ export const JanjiImanPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold text-orange-600 mb-1">
-                      {formatCurrency(totalRemaining)}
+                      {formatCurrency(statistics.totalRemaining)}
                     </div>
                     <p className="text-xs text-gray-500">
                       Yang perlu dibayarkan
@@ -327,7 +280,7 @@ export const JanjiImanPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold text-gray-900 mb-1">
-                      {totalDonors}
+                      {statistics.totalDonors}
                     </div>
                     <p className="text-xs text-gray-500">
                       Jemaat yang berkomitmen
@@ -363,7 +316,7 @@ export const JanjiImanPage = () => {
                         <div className="mt-3 flex items-center justify-between">
                           <div className="text-sm text-gray-600">
                             {loading ? (
-                              <span className="text-blue-600">Mencari data...</span>
+                              <span className="text-blue-600">Mencari data dari server...</span>
                             ) : (
                               <span>
                                 Hasil pencarian untuk: <span className="font-semibold text-gray-900">"{searchInput}"</span>
@@ -415,7 +368,7 @@ export const JanjiImanPage = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-sm text-gray-500">Total Entri</p>
-                        <p className="text-2xl font-bold text-blue-600">{totalDonors}</p>
+                        <p className="text-2xl font-bold text-blue-600">{statistics.totalDonors}</p>
                       </div>
                     </div>
                   </div>
@@ -435,12 +388,12 @@ export const JanjiImanPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {currentDonations.map((donation, index) => (
+                        {paginationData.currentDonations.map((donation, index) => (
                           <tr 
                             key={`${donation.name}-${index}`}
                             className="border-b border-gray-100 hover:bg-blue-50 transition-colors"
                           >
-                            <td className="py-4 px-6 text-gray-600 font-medium">{startIndex + index + 1}</td>
+                            <td className="py-4 px-6 text-gray-600 font-medium">{paginationData.startIndex + index + 1}</td>
                             <td className="py-4 px-6 font-semibold text-gray-900 truncate" title={donation.name}>{donation.name}</td>
                             <td className="py-4 px-6 text-right font-bold text-blue-600">
                               {formatCurrency(donation.amount)}
@@ -482,10 +435,10 @@ export const JanjiImanPage = () => {
                   </div>
                   
                   {/* Pagination Controls */}
-                  {pageSize !== 'all' && totalPages > 1 && (
+                  {pageSize !== 'all' && paginationData.totalPages > 1 && (
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-gray-100">
                       <div className="text-sm text-gray-500">
-                        Menampilkan {startIndex + 1} hingga {Math.min(endIndex, donations.length)} dari {donations.length} entri
+                        Menampilkan {paginationData.startIndex + 1} hingga {Math.min(paginationData.endIndex, donations.length)} dari {donations.length} entri
                       </div>
                       
                       <Pagination className="mx-0">
@@ -499,11 +452,11 @@ export const JanjiImanPage = () => {
                             </PaginationItem>
                           )}
                           
-                          {[...Array(totalPages)].map((_, i) => {
+                          {[...Array(paginationData.totalPages)].map((_, i) => {
                             const page = i + 1;
                             const showPage = 
                               page === 1 || 
-                              page === totalPages || 
+                              page === paginationData.totalPages || 
                               (page >= currentPage - 1 && page <= currentPage + 1);
                             
                             if (!showPage && page === currentPage - 2) {
@@ -537,7 +490,7 @@ export const JanjiImanPage = () => {
                             );
                           })}
                           
-                          {currentPage < totalPages && (
+                          {currentPage < paginationData.totalPages && (
                             <PaginationItem>
                               <PaginationNext 
                                 onClick={() => handlePageChange(currentPage + 1)}
