@@ -59,7 +59,7 @@ export const Footer = () => {
               <a href="#funding" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Pendanaan
               </a>
-              <a href="https://janjiiman.gkj-pamulang.org" target="_blank" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/janji-iman" className="block text-gray-400 hover:text-blue-400 transition-colors text-sm">
                 Janji Iman
               </a>
             </div>
