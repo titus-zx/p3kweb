@@ -559,9 +559,38 @@ export const JanjiImanPage = () => {
                     Daftar Sekarang
                   </a>
                   
-                  <p className="mt-6 text-sm text-blue-100">
-                    Proses mudah dan cepat, hanya memerlukan beberapa menit
-                  </p>
+                  <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                    <p className="text-sm font-semibold text-white mb-4">
+                      Untuk informasi lebih lanjut, silakan menghubungi PIC di wilayah berikut ini:
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left text-sm text-blue-50">
+                      <div>
+                        <p className="font-semibold text-white mb-2">PIC Wilayah PP1:</p>
+                        <p>• Ibu Kristini</p>
+                        <p>• Ibu Merry Christiana</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white mb-2">PIC Wilayah PP2:</p>
+                        <p>• Ibu Maria Stefanus</p>
+                        <p>• Bpk. Samuel Yogasara</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white mb-2">PIC Wilayah Serpong:</p>
+                        <p>• Bpk. Sayoga Supriantoro</p>
+                        <p>• Bpk. Titus Adi Prasetyo</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white mb-2">PIC Wilayah Reni Jaya:</p>
+                        <p>• Bpk. Andreas Bambang</p>
+                        <p>• Ibu Finny Yunita</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white mb-2">PIC Wilayah Bukit Indah:</p>
+                        <p>• Bpk. Andrianto Nataladi</p>
+                        <p>• Ibu Trami Trijogo</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </>
