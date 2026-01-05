@@ -53,7 +53,7 @@ Berdasarkan Keputusan No.: **KEP 15/GKJP/X/2025 tanggal 28 Oktober 2025** majeli
 
 **Spiritualitas**
 * Pdt. Yosua Budiman Harahap, M.Th.
-* Pdt. Rudy Ariyanto, S.Th., M.Min
+* Pdt. Dr. Agus Hendratmo, MTh
 
 **Kepribadian**
 * Dkn. Sumarsih (Majelis)
