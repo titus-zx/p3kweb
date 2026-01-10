@@ -8,6 +8,7 @@ import { CommitteeStructure } from "./components/CommitteeStructure";
 import { CandidateProfile } from "./components/CandidateProfile";
 import { Funding } from "./components/Funding";
 import { JanjiImanPage } from "./components/JanjiIman";
+import { DonaturJIPage } from "./components/DonaturJI";
 import { Footer } from "./components/Footer";
 
 // Scroll to hash component
@@ -51,6 +52,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/janji-iman" element={<JanjiImanPage />} />
+          <Route path="/donatur-ji" element={<DonaturJIPage />} />
         </Routes>
       </div>
     </Router>
