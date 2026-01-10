@@ -5,8 +5,7 @@ import { Skeleton } from './ui/skeleton';
 import { Alert, AlertDescription } from './ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import { Badge } from './ui/badge';
-import { Users, ArrowLeft, Church, Loader2, CheckCircle2, Clock, MapPin } from 'lucide-react';
+import { Users, ArrowLeft, Church, Loader2, MapPin } from 'lucide-react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
@@ -122,26 +121,12 @@ export const DonaturJIPage = () => {
       {items.map((item, index) => (
         <div 
           key={`${item.name}-${index}`}
-          className="flex items-center justify-between py-3 px-4 hover:bg-gray-50 transition-colors"
+          className="flex items-center py-3 px-4 hover:bg-gray-50 transition-colors"
         >
           <div className="flex items-center gap-3">
             <span className="text-gray-500 text-sm w-8">{index + 1}.</span>
             <span className="font-medium text-gray-900">{item.name}</span>
           </div>
-          <Badge 
-            variant={item.status === 'LUNAS' ? 'default' : 'secondary'}
-            className={item.status === 'LUNAS' 
-              ? 'bg-green-100 text-green-800 hover:bg-green-100' 
-              : 'bg-orange-100 text-orange-800 hover:bg-orange-100'
-            }
-          >
-            {item.status === 'LUNAS' ? (
-              <CheckCircle2 className="w-3 h-3 mr-1" />
-            ) : (
-              <Clock className="w-3 h-3 mr-1" />
-            )}
-            {item.status}
-          </Badge>
         </div>
       ))}
     </div>
@@ -201,7 +186,7 @@ export const DonaturJIPage = () => {
           ) : (
             <>
               {/* Statistics Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="grid grid-cols-1 gap-6 mb-12">
                 <Card className="bg-white shadow-xl border-t-4 border-t-blue-500 hover:shadow-2xl transition-shadow">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium text-gray-600">Total Donatur</CardTitle>
@@ -213,36 +198,6 @@ export const DonaturJIPage = () => {
                     </div>
                     <p className="text-xs text-gray-500">
                       Jumlah donatur terdaftar
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-white shadow-xl border-t-4 border-t-green-500 hover:shadow-2xl transition-shadow">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">Sudah Lunas</CardTitle>
-                    <CheckCircle2 className="h-6 w-6 text-green-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-green-600 mb-1">
-                      {statistics.lunas}
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      {((statistics.lunas / statistics.total) * 100).toFixed(1)}% dari total donatur
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-white shadow-xl border-t-4 border-t-orange-500 hover:shadow-2xl transition-shadow">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">Belum Lunas</CardTitle>
-                    <Clock className="h-6 w-6 text-orange-500" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-orange-600 mb-1">
-                      {statistics.belum}
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      {((statistics.belum / statistics.total) * 100).toFixed(1)}% dari total donatur
                     </p>
                   </CardContent>
                 </Card>
@@ -277,18 +232,6 @@ export const DonaturJIPage = () => {
                       
                       {wilayahList.map(wilayah => (
                         <TabsContent key={wilayah} value={wilayah}>
-                          <div className="mb-4 flex gap-4">
-                            <div className="flex items-center gap-2 text-sm">
-                              <CheckCircle2 className="w-4 h-4 text-green-500" />
-                              <span className="text-gray-600">Lunas:</span>
-                              <span className="font-semibold text-green-600">{wilayahStats[wilayah].lunas}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm">
-                              <Clock className="w-4 h-4 text-orange-500" />
-                              <span className="text-gray-600">Belum:</span>
-                              <span className="font-semibold text-orange-600">{wilayahStats[wilayah].belum}</span>
-                            </div>
-                          </div>
                           <div className="border rounded-lg overflow-hidden">
                             {renderDonaturList(groupedByWilayah[wilayah])}
                           </div>
@@ -319,13 +262,8 @@ export const DonaturJIPage = () => {
                               </div>
                               <div>
                                 <div className="font-semibold text-gray-900">{wilayah}</div>
-                                <div className="text-xs text-gray-500 flex gap-3 mt-1">
-                                  <span className="text-green-600">
-                                    ✓ {wilayahStats[wilayah].lunas} Lunas
-                                  </span>
-                                  <span className="text-orange-600">
-                                    ○ {wilayahStats[wilayah].belum} Belum
-                                  </span>
+                                <div className="text-xs text-gray-500 mt-1">
+                                  {wilayahStats[wilayah].total} donatur
                                 </div>
                               </div>
                             </div>
