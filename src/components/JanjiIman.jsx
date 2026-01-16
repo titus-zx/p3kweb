@@ -41,7 +41,7 @@ const parseCSVData = (csvText) => {
   const lines = csvText.trim().split('\n');
   return lines.map((line) => {
     const values = parseCSVLine(line);
-    const name = values[0] || '';
+    const name = values[4] || ''; // nig column as name
     const amount = parseCurrency(values[1]);
     const paid = parseCurrency(values[2]);
     const type = values[3] || 'online';
@@ -105,7 +105,7 @@ export const JanjiImanPage = () => {
         try {
           setLoading(true);
           const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
-          const url = `${baseUrl}?col1=${encodeURIComponent(searchInput)}`;
+          const url = `${baseUrl}?col5=${encodeURIComponent(searchInput)}`;
           const response = await fetch(url);
           
           if (!response.ok) {
@@ -295,7 +295,7 @@ export const JanjiImanPage = () => {
                   <CardContent className="pt-6">
                     <div className="relative">
                       <label htmlFor="searchName" className="block text-sm font-medium text-gray-700 mb-2">
-                        Cari berdasarkan Nama
+                        Cari berdasarkan NIG
                       </label>
                       <div className="relative">
                         <input
@@ -303,7 +303,7 @@ export const JanjiImanPage = () => {
                           type="text"
                           value={searchInput}
                           onChange={(e) => setSearchInput(e.target.value)}
-                          placeholder="Ketik nama untuk mencari... (otomatis mencari setelah berhenti mengetik)"
+                          placeholder="Ketik NIG untuk mencari... (otomatis mencari setelah berhenti mengetik)"
                           className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         {loading && searchInput && (
@@ -379,7 +379,7 @@ export const JanjiImanPage = () => {
                       <thead>
                         <tr className="border-b border-gray-200 bg-gray-50">
                           <th className="text-left py-4 px-6 font-semibold text-gray-700 w-16">No</th>
-                          <th className="text-left py-4 px-6 font-semibold text-gray-700 w-48">Nama Jemaat</th>
+                          <th className="text-left py-4 px-6 font-semibold text-gray-700 w-48">NIG</th>
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Komitmen</th>
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Dibayarkan</th>
                           <th className="text-right py-4 px-6 font-semibold text-gray-700 w-32">Sisa</th>
