@@ -70,7 +70,7 @@ export const JanjiImanPage = () => {
     const fetchDonations = async () => {
       try {
         setLoading(true);
-        const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
+        const baseUrl = 'https://script.google.com/macros/s/AKfycbzB3lFKDYrGBCvNJ341vayd2m7_4EwVxbD8Gwd8mOQO6hVtLZvexh1p3d8H26QXP2zL/exec';
         const response = await fetch(baseUrl);
         
         if (!response.ok) {
@@ -104,7 +104,7 @@ export const JanjiImanPage = () => {
 
         try {
           setLoading(true);
-          const baseUrl = 'https://script.google.com/macros/s/AKfycbzrgQRjQ8M-Mrbj-uZGMh8DVymmTFPA7a8affa9-xnuPjy5D7dyECYkmUly5WJas2cS/exec';
+          const baseUrl = 'https://script.google.com/macros/s/AKfycbzB3lFKDYrGBCvNJ341vayd2m7_4EwVxbD8Gwd8mOQO6hVtLZvexh1p3d8H26QXP2zL/exec';
           const url = `${baseUrl}?col5=${encodeURIComponent(searchInput)}`;
           const response = await fetch(url);
           
