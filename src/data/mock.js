@@ -52,20 +52,20 @@ export const timelineData = [
     color: "green"
   },
   {
-    date: "Des 2025 - Mei 2026",
+    date: "Des 2025 - Agst 2026",
     title: "Pendampingan dan Pembimbingan",
     description: timelineDescriptions.pendampingan,
     color: "red",
     current: true
   },
   {
-    date: "Juli 2026",
-    title: "Ujian Premtoar",
+    date: "Sept 2026",
+    title: "Ujian Premptoir",
     description: timelineDescriptions.ujian,
     color: "orange"
   },
   {
-    date: "Agst 2026 - Jun 2027",
+    date: "Okt 2026 - Jun 2027",
     title: "Masa Vikariat",
     description: timelineDescriptions.vikariat,
     color: "orange"
